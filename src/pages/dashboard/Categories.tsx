@@ -7,10 +7,10 @@ interface Category {
 }
 export const Categories = () => {
     const category: Category[] = [
-        { name: "Category 1", description: "Description for Category 1.", path:'/report' },
-        { name: "Category 2", description: "Description for Category 2.", path:'/report' },
-        { name: "Category 3", description: "Description for Category 3.", path:'/report' },
-        { name: "Category 4", description: "Description for Category 4.", path:'/report' },
+        { name: "Report", description: "Description for Report.", path:'/report/report' },
+        { name: "Bill", description: "Description for Bill.", path:'/report/bill' },
+        { name: "Category 3", description: "Description for Category 3.", path:'/report/category3' },
+        { name: "Category 4", description: "Description for Category 4.", path:'/report/category4' },
     ]
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

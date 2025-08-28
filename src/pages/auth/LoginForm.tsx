@@ -8,25 +8,41 @@ import { Input } from "../../components/ui/input"
 import { Label } from "../../components/ui/label"
 import { Alert, AlertDescription } from "../../components/ui/alert"
 import { Eye, EyeOff, AlertCircle } from "lucide-react"
+import { login } from "../../services/authService"
+import { useNavigate } from "react-router-dom"
 
 export function LoginForm() {
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   })
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
+  const navigate = useNavigate()
+  const [loggingIn, setLoggingIn] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError("")
+    setLoggingIn(true)
 
-    // Simple validation - you can replace this with your actual authentication logic
-    if (formData.email === "user@email.com" && formData.password === "1234") {
-      setError("")
-      console.log("Login successful!", formData)
-      // Handle successful login here
-    } else {
-      setError("We don't recognize this email address and password combination")
+    try {
+      const data = await login(formData.username, formData.password)
+      const token = data.token
+      if (token) {
+        localStorage.setItem('jwtToken', token)
+        console.log("Login successful!", formData)
+        navigate("/dashboard") // redirect on success
+      } else {
+        setError("Invalid response from server")
+      }
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message ||
+        "We don't recognize this username and password combination"
+      )
+    } finally {
+      setLoggingIn(false)
     }
   }
 
@@ -51,19 +67,19 @@ export function LoginForm() {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="username">Username</Label>
             <Input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
+              id="username"
+              name="username"
+              type="text"
+              value={formData.username}
               onChange={handleInputChange}
               className="w-full"
               required
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2"> 
             <Label htmlFor="password">Password</Label>
             <div className="relative">
               <Input
@@ -92,8 +108,8 @@ export function LoginForm() {
           <Button 
             type="submit" 
             className="w-full" 
-            disabled={!formData.email || !formData.password || !!error}>
-            Sign In
+            disabled={!formData.username || !formData.password || !!error || loggingIn}>
+            {loggingIn ? "Signing In..." : "Sign In"}
           </Button>
         </form>
     </>
