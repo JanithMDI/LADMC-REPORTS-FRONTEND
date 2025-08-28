@@ -23,8 +23,11 @@ export async function exportReportCSV(startDate: any, endDate: any) {
   })
   const url = window.URL.createObjectURL(new Blob([response.data]))
   const link = document.createElement("a")
-  link.href = url
-  link.setAttribute("download", "report.csv")
+    link.href = url
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const randomNum = Math.floor(Math.random() * 1000000);
+    const filename = `${randomNum}-${timestamp}.csv`;
+    link.setAttribute("download", filename);
   document.body.appendChild(link)
   link.click()
   link.remove()
@@ -44,7 +47,9 @@ export async function exportReportPDF( reference?: string) {
   const url = window.URL.createObjectURL(new Blob([response.data]))
   const link = document.createElement("a")
   link.href = url
-  link.setAttribute("download", "report.pdf")
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `${reference || "report"}-${timestamp}.pdf`;
+    link.setAttribute("download", filename);
   document.body.appendChild(link)
   link.click()
   link.remove()

@@ -16,4 +16,19 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
+// Add a response interceptor to handle 401
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403)
+    ) {
+      localStorage.removeItem("jwtToken")
+      window.location.href = "/"
+    }
+    return Promise.reject(error)
+  }
+)
+
 export default api

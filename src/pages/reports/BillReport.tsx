@@ -14,6 +14,7 @@ export default function BillReport({ startDate, endDate }: BillReportProps) {
   const [dots, setDots] = useState(1)
   const [reference, setReference] = useState("")
   const [pdfUrl, setPdfUrl] = useState<string | null>(null)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined
@@ -29,30 +30,15 @@ export default function BillReport({ startDate, endDate }: BillReportProps) {
     }
   }, [downloading])
 
-  const handlePreviewPDF = async () => {
-    if (!reference) return
-    setDownloading(true)
-    try {
-      const response = await fetch(`/report/pdf?reference=${reference}`, {
-        headers: { Accept: "application/pdf" }
-      })
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      setPdfUrl(url)
-    } catch {
-      alert("Failed to preview PDF")
-    } finally {
-      setDownloading(false)
-    }
-  }
 
   const handleDownloadPDF = async () => {
     if (!reference) return
     setDownloading(true)
+    setError("")
     try {
-      await exportReportPDF( reference)
+      await exportReportPDF(reference)
     } catch {
-      alert("Failed to download PDF")
+      setError("No record found on this id")
     } finally {
       setDownloading(false)
     }
@@ -68,31 +54,28 @@ export default function BillReport({ startDate, endDate }: BillReportProps) {
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-end gap-4">
         <div className="space-y-2">
-          <Label htmlFor="reference">Reference number</Label>
+          <Label htmlFor="reference">Visit Number</Label>
           <input
             id="reference"
             type="text"
-            placeholder="Enter reference number"
+            placeholder="Enter Visit Number"
             value={reference}
             onChange={e => setReference(e.target.value)}
             className="border rounded px-3 py-2 mb-2 w-64"
           />
         </div>
         <Button
-          onClick={handlePreviewPDF}
-          className="bg-secondary h-10 text-secondary-foreground"
-          disabled={downloading || !reference}
-        >
-          {downloading ? `Loading${'.'.repeat(dots)}` : "Preview PDF"}
-        </Button>
-        <Button
           onClick={handleDownloadPDF}
           className="bg-primary h-10 text-primary-foreground"
           disabled={downloading || !reference}
+          style={{marginBottom: "8px"}}
         >
           {downloading ? `Downloading${'.'.repeat(dots)}` : "Download PDF"}
         </Button>
       </div>
+      {error && (
+        <div className="text-red-500 mt-2">{error}</div>
+      )}
       {pdfUrl && (
         <div className="border rounded mt-4 w-full" style={{ height: "600px" }}>
           <iframe
