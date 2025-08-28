@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root{
+  --primary: oklch(62.3% 0.214 259.815);
+  --primary-hover: oklch(48.8% 0.243 264.376);
+  --primary-foreground: oklch(1 0 0);
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(13% 0.028 261.692);
+  --muted: oklch(96.7% 0.003 264.542);
+  --muted-foreground: oklch(55.1% 0.027 264.364);
+  --border:oklch(87.2% 0.01 258.338);
+  --input:oklch(96.7% 0.003 264.542);
+  --destructive: oklch(63.7% 0.237 25.331);
+  --destructive-foreground: oklch(1 0 0);
+  --secondary: oklch(96.7% 0.003 264.542);
+  --secondary-transparent: oklch(96.7% 0.003 264.542)80;
+  --secondary-foreground: oklch(13% 0.028 261.692);
+}
+
+@theme inline {
+  --font-geist: 'Geist', sans-serif;
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: #FFFFFF;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border:var(--border);
+  --color-input:var(--input);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-transparent: var(--secondary-transparent);
+  --color-secondary-foreground: var(--secondary-foreground);
+}
+
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-geist;
+  }
+}
