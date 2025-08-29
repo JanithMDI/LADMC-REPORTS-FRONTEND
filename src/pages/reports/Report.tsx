@@ -75,7 +75,7 @@ export default function Report() {
 
             <div className="flex items-center justify-between mt-4">
                 <div className="text-sm text-muted-foreground">
-                    Total report: <span className="font-medium text-foreground">
+                    Total Records: <span className="font-medium text-foreground">
                     {reportData?.totalCount ? reportData.totalCount.toLocaleString("en-US", { minimumFractionDigits: 0 }) : "0"}
                     </span>
                 </div>

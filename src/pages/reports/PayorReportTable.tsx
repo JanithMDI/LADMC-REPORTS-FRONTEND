@@ -42,20 +42,19 @@ interface PayorReportRow {
 }
 
 interface PayorReportTableProps {
-  data?: PayorReportRow[]
+  data?: { data: PayorReportRow[] } // changed to expect { data: [...] }
   loading?: boolean
   startDate?: Date
   endDate?: Date
 }
 
-export function PayorReportTable({ data, loading, startDate, endDate }: PayorReportTableProps) {
+export default function PayorReportTable({ data, loading, startDate, endDate }: PayorReportTableProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const [exporting, setExporting] = useState(false)
   const [exportDots, setExportDots] = useState(1)
-
-  const isArray = Array.isArray(data)
-  const totalPages = isArray && data && data.length > 0 ? Math.ceil(data.length / itemsPerPage) : 1
+  const isArray = Array.isArray(data?.data)
+  const totalPages = isArray && data?.data && data.data.length > 0 ? Math.ceil(data.data.length / itemsPerPage) : 1
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined
@@ -85,21 +84,35 @@ export function PayorReportTable({ data, loading, startDate, endDate }: PayorRep
   }
 
   if (loading) {
-    // ...existing skeleton code...
     return (
       <div className="space-y-4">
-        {/* ...skeleton UI... */}
+        <div className="flex justify-end mb-2">
+          <div className="h-8 w-24 bg-muted animate-pulse rounded" />
+        </div>
+        <div className="text-sm text-muted-foreground mb-2">
+          {/* <div className="h-4 w-48 bg-muted animate-pulse rounded" /> */}
+        </div>
+        <div className="border border-border rounded-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            {/* Skeleton table header */}
+            <div className="h-10 bg-muted animate-pulse rounded mb-2" />
+            {/* Skeleton table rows */}
+            {Array.from({ length: 10 }).map((_, idx) => (
+              <div key={idx} className="h-10 bg-muted animate-pulse rounded mb-2" />
+            ))}
+          </div>
+        </div>
       </div>
     )
   }
 
-  if (!isArray || !data || data.length === 0) {
+  if (!isArray || !data?.data || data.data.length === 0) {
     return <div className="text-center text-muted-foreground py-8">No record to show</div>
   }
 
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const currentData = data.slice(startIndex, endIndex)
+  const currentData = data.data.slice(startIndex, endIndex)
 
   const formatDate = (dateString: string) => {
     if (!dateString) return ""
