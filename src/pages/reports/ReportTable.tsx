@@ -38,6 +38,8 @@ interface ReportTableProps {
     data: ReportRow[]
   }
   loading?: boolean
+    startDate?: Date
+    endDate?: Date
 }
 
 export function ReportTable({ data, loading, startDate, endDate }: ReportTableProps) {
@@ -82,7 +84,7 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
       const formatDateOnly = (d?: Date) =>
         d ? d.toISOString().slice(0, 10) : undefined
       await exportReportCSV(formatDateOnly(startDate), formatDateOnly(endDate))
-    } catch (err) {
+    } catch (err:any) {
       alert("Failed to export CSV")
     } finally {
       setExporting(false)

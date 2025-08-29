@@ -83,7 +83,7 @@ export default function Report() {
 
             {/* Show error */}
 
-            {reportType === "bill" && <BillReport startDate={startDate} endDate={endDate} />}
+            {reportType === "bill" && <BillReport />}
             {reportType === "report" && <ReportTable data={reportData} loading={loading} startDate={startDate} endDate={endDate} />}
         </section>
     </>

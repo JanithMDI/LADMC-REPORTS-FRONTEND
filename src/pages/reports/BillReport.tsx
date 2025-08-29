@@ -2,18 +2,13 @@ import { useState, useEffect } from "react"
 import { Button } from "../../components/ui/button"
 import { exportReportPDF } from "../../services/reportService"
 import { Label } from "../../components/ui/label"
+import Loader from "../../components/ui/Loader"
 
-
-interface BillReportProps {
-  startDate?: Date
-  endDate?: Date
-}
-
-export default function BillReport({ startDate, endDate }: BillReportProps) {
+export default function BillReport() {
   const [downloading, setDownloading] = useState(false)
   const [dots, setDots] = useState(1)
   const [reference, setReference] = useState("")
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null)
+  const [pdfUrl, ] = useState<string | null>(null)
   const [error, setError] = useState("")
 
   useEffect(() => {
@@ -70,9 +65,12 @@ export default function BillReport({ startDate, endDate }: BillReportProps) {
           disabled={downloading || !reference}
           style={{marginBottom: "8px"}}
         >
-          {downloading ? `Downloading${'.'.repeat(dots)}` : "Download PDF"}
+          { "Download PDF"}
         </Button>
       </div>
+      {downloading && (
+        <Loader message={`Downloading${'.'.repeat(dots)}`} />
+      )}
       {error && (
         <div className="text-red-500 mt-2">{error}</div>
       )}
@@ -90,3 +88,4 @@ export default function BillReport({ startDate, endDate }: BillReportProps) {
     </div>
   )
 }
+   
