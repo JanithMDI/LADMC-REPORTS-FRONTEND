@@ -81,7 +81,7 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
   const handleExportCSV = async () => {
     setExporting(true)
     try {
-      const formatDateOnly = (d?: Date) =>
+      const formatDateOnly = (d?: any) =>
         d ? d.toISOString().slice(0, 10) : undefined
       await exportReportCSV(formatDateOnly(startDate), formatDateOnly(endDate))
     } catch (err:any) {
