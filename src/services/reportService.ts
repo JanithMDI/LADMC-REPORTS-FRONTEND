@@ -10,6 +10,16 @@ export async function fetchReportPr1(startDate: any, endDate: any) {
   return response.data
 }
 
+export async function fetchReportPayor(startDate: any, endDate: any) {
+  const response = await api.get("/report/payor", {
+    params: {
+      startDate,
+      endDate,
+    },
+  })
+  return response.data
+}
+
 export async function exportReportCSV(startDate: Date, endDate: Date) {
   const response = await api.get("/report/pr1/csv", {
     responseType: "blob",

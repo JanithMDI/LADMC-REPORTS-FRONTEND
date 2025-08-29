@@ -13,7 +13,7 @@ export const Categories = () => {
     const category: Category[] = [
         { title: "Itemized Bill", img: ImgItemizedBill, path:'/report/bill' },
         { title: "Stat Pool-Classic", img: ImgStatPoolClassic, path:'/report/report' },
-        { title: "Stat Pool-Payor", img: ImgStatPoolPayor,  path:'/report/category3' },
+        { title: "Stat Pool-Payor", img: ImgStatPoolPayor,  path:'/report/payor' },
         { title: "Core Measures", img: ImgCoreMeasures,  path:'/report/category4' },
     ]
   return (

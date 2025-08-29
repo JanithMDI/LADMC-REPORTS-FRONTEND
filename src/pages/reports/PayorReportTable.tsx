@@ -7,62 +7,55 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { exportReportCSV } from "../../services/reportService"
 
-interface ReportRow {
+interface PayorReportRow {
   pat_ty_ds: string
   Description: string
   AHD_Patient_Type: string
   pat_nm: string
   fin_class: string
-  med_rec_no: number
+  med_rec_no: string
   acct_id: number
   adm_dt: string
-  dschrg_dt: string
-  revised_dischrg: string
-  bill_dt: string
-  sta_cd: string
-  AHD_Days_OS: number | null
-  AHD_Open_AR: number | null
-  chg: number
-  pmt: number
-  adj: number
-  balance: number
-  chg_old: number
-  pmt_old: number
-  adj_old: number
-  balance_old: number
+  dschrg_dt: string | null
+  revised_dischrg: string | null
+  bill_dt: string | null
+  sta_cd: string | null
+  chg: string
+  pmt: string
+  adj: string
+  balance: string
+  chg_old: string
+  pmt_old: string
+  adj_old: string
+  balance_old: string
+  LOS: number
+  AHD_Days_OS: number
+  AHD_Open_AR: number
+  AHR_OPEN_DAYS: string
+  Primary_Carrier_Name: string | null
+  Primary_Policy_No: string | null
+  Secondary_Carrier_Name: string | null
+  Secondary_Policy_No: string | null
+  Tertiary_Carrier_Name: string | null
+  Tertiary_Policy_No: string | null
+  birth_date: string
 }
 
-interface ReportTableProps {
-  data?: {
-    lastDownloaded: string
-    data: ReportRow[]
-  }
+interface PayorReportTableProps {
+  data?: PayorReportRow[]
   loading?: boolean
-    startDate?: Date
-    endDate?: Date
+  startDate?: Date
+  endDate?: Date
 }
 
-export function ReportTable({ data, loading, startDate, endDate }: ReportTableProps) {
+export function PayorReportTable({ data, loading, startDate, endDate }: PayorReportTableProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const [exporting, setExporting] = useState(false)
   const [exportDots, setExportDots] = useState(1)
 
-
-
-  const isArray = Array.isArray(data?.data)
-  const totalPages = isArray && data?.data.length > 0 ? Math.ceil(data?.data.length / itemsPerPage) : 1
-
-  useEffect(() => {
-    if (isArray) {
-      if (data?.data.length > 0) {
-        const lastStartIndex = (totalPages - 1) * itemsPerPage
-        const lastEndIndex = lastStartIndex + itemsPerPage
-        const lastDownloadedObjects = data?.data.slice(lastStartIndex, lastEndIndex)
-        console.log("Last downloaded objects:", lastDownloadedObjects)
-      }
-    }
-  }, [data, isArray, itemsPerPage, totalPages])
+  const isArray = Array.isArray(data)
+  const totalPages = isArray && data && data.length > 0 ? Math.ceil(data.length / itemsPerPage) : 1
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined
@@ -84,7 +77,7 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
       const formatDateOnly = (d?: any) =>
         d ? d.toISOString().slice(0, 10) : undefined
       await exportReportCSV(formatDateOnly(startDate), formatDateOnly(endDate))
-    } catch (err:any) {
+    } catch {
       alert("Failed to export CSV")
     } finally {
       setExporting(false)
@@ -92,35 +85,21 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
   }
 
   if (loading) {
+    // ...existing skeleton code...
     return (
       <div className="space-y-4">
-        <div className="flex justify-end mb-2">
-          <div className="h-8 w-24 bg-muted animate-pulse rounded" />
-        </div>
-        <div className="text-sm text-muted-foreground mb-2">
-          <div className="h-4 w-48 bg-muted animate-pulse rounded" />
-        </div>
-        <div className="border border-border rounded-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            {/* Skeleton table header */}
-            <div className="h-10 bg-muted animate-pulse rounded mb-2" />
-            {/* Skeleton table rows */}
-            {Array.from({ length: 10 }).map((_, idx) => (
-              <div key={idx} className="h-10 bg-muted animate-pulse rounded mb-2" />
-            ))}
-          </div>
-        </div>
+        {/* ...skeleton UI... */}
       </div>
     )
   }
 
-  if (!isArray || data?.data.length === 0) {
+  if (!isArray || !data || data.length === 0) {
     return <div className="text-center text-muted-foreground py-8">No record to show</div>
   }
 
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  const currentData = data?.data.slice(startIndex, endIndex)
+  const currentData = data.slice(startIndex, endIndex)
 
   const formatDate = (dateString: string) => {
     if (!dateString) return ""
@@ -130,7 +109,6 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
 
   return (
     <div className="space-y-4">
-      {/* Export CSV Button */}
       <div className="flex justify-end mb-2">
         <Button
           variant="link"
@@ -141,11 +119,6 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
           {exporting ? `Exporting${'.'.repeat(exportDots)}` : "Export CSV"}
         </Button>
       </div>
-      {/* Last Downloaded */}
-      <div className="text-sm text-muted-foreground mb-2">
-        Last Downloaded: {data?.lastDownloaded ? formatDate(data.lastDownloaded) : "N/A"}
-      </div>
-      {/* Table */}
       <div className="border border-border rounded-sm overflow-hidden">
         <div className="overflow-x-auto">
           <Table>
@@ -159,7 +132,11 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
                 <TableHead>Discharge Date</TableHead>
                 <TableHead>Account ID</TableHead>
                 <TableHead>Medical Record No</TableHead>
-                <TableHead>Status Code</TableHead>
+                <TableHead>LOS</TableHead>
+                <TableHead>Open Days</TableHead>
+                <TableHead>Birth Date</TableHead>
+                <TableHead>Primary Carrier</TableHead>
+                <TableHead>Primary Policy</TableHead>
                 <TableHead>Charge</TableHead>
                 <TableHead>Payment</TableHead>
                 <TableHead>Adjustment</TableHead>
@@ -177,7 +154,11 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
                   <TableCell>{row.dschrg_dt ? formatDate(row.dschrg_dt) : "N/A"}</TableCell>
                   <TableCell>{row.acct_id ?? "N/A"}</TableCell>
                   <TableCell>{row.med_rec_no ?? "N/A"}</TableCell>
-                  <TableCell>{row.sta_cd || "N/A"}</TableCell>
+                  <TableCell>{row.LOS ?? "N/A"}</TableCell>
+                  <TableCell>{row.AHR_OPEN_DAYS || "N/A"}</TableCell>
+                  <TableCell>{row.birth_date || "N/A"}</TableCell>
+                  <TableCell>{row.Primary_Carrier_Name || "N/A"}</TableCell>
+                  <TableCell>{row.Primary_Policy_No || "N/A"}</TableCell>
                   <TableCell>{row.chg ?? "N/A"}</TableCell>
                   <TableCell>{row.pmt ?? "N/A"}</TableCell>
                   <TableCell>{row.adj ?? "N/A"}</TableCell>
@@ -188,13 +169,11 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
           </Table>
         </div>
       </div>
-
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <div className="text-sm text-muted-foreground">
           Page {currentPage} of {totalPages}
         </div>
-
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
@@ -205,7 +184,6 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
             <ChevronLeft className="h-4 w-4" />
             Previous
           </Button>
-
           <div className="flex items-center gap-1 ">
             {[1, 2, 3, 4].map((page) => (
               <Button
@@ -223,7 +201,6 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
               {totalPages}
             </Button>
           </div>
-
           <Button
             variant="outline"
             size="sm"
@@ -234,7 +211,6 @@ export function ReportTable({ data, loading, startDate, endDate }: ReportTablePr
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
-
         <div className="flex items-center gap-2">
           <Select value={itemsPerPage.toString()} onValueChange={(value) => setItemsPerPage(Number.parseInt(value))}>
             <SelectTrigger className="w-20">

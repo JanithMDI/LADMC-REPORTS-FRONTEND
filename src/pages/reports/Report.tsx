@@ -6,9 +6,10 @@ import { Label } from "../../components/ui/label"
 import { DatePicker } from "../../components/ui/date-picker"
 import { ReportTable } from "./ReportTable"
 import Appbar from "../../components/ui/appbar"
-import { fetchReportPr1 } from "../../services/reportService"
+import { fetchReportPr1,fetchReportPayor } from "../../services/reportService"
 import { useParams } from "react-router-dom"
 import BillReport from "./BillReport"
+import PayorReportTable from "./PayorReportTable"
 
 export default function Report() {
   const [startDate, setStartDate] = useState<Date | undefined>(new Date(2025, 7, 10)) // Aug 10, 2025
@@ -26,10 +27,14 @@ export default function Report() {
     setLoading(true)
     setError("")
     try {
-      // Format dates as YYYY-MM-DD (date only, no time)
       const formatDateOnly = (d?: Date) =>
         d ? d.toISOString().slice(0, 10) : undefined
-      const data = await fetchReportPr1(formatDateOnly(startDate), formatDateOnly(endDate))
+      let data
+      if (reportType === "payor") {
+        data = await fetchReportPayor(formatDateOnly(startDate), formatDateOnly(endDate))
+      } else {
+        data = await fetchReportPr1(formatDateOnly(startDate), formatDateOnly(endDate))
+      }
       setReportData(data)
       console.log("Report data:", data)
     } catch (err: any) {
@@ -85,6 +90,7 @@ export default function Report() {
 
             {reportType === "bill" && <BillReport />}
             {reportType === "report" && <ReportTable data={reportData} loading={loading} startDate={startDate} endDate={endDate} />}
+            {reportType === "payor" && <PayorReportTable data={reportData} loading={loading} startDate={startDate} endDate={endDate} />}
         </section>
     </>
   )
