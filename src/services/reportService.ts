@@ -44,22 +44,27 @@ export async function exportReportCSV(startDate: Date, endDate: Date) {
   window.URL.revokeObjectURL(url)
 }
 
-export async function exportReportPDF( reference?: string) {
+export async function exportReportPDF(reference?: string) {
+  const response = await api.get("/report/pdf", {
+    params: { reference },
+  })
+  return response.data
+}
+
+export async function downloadReportPDF(reference?: string) {
   const response = await api.get("/report/pdf", {
     responseType: "blob",
     headers: {
       Accept: "application/pdf",
     },
-    params: {
-      reference,
-    },
+    params: { reference },
   })
   const url = window.URL.createObjectURL(new Blob([response.data]))
   const link = document.createElement("a")
   link.href = url
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `${reference || "report"}-${timestamp}.pdf`;
-    link.setAttribute("download", filename);
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const filename = `${reference || "report"}-${timestamp}.pdf`;
+  link.setAttribute("download", filename);
   document.body.appendChild(link)
   link.click()
   link.remove()
