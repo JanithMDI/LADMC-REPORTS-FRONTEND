@@ -6,14 +6,18 @@ function getItemizedBillHtml(data: any[]): string {
   // Parse insurance fields
   const [primaryInsName = "", primaryPolicyNo = ""] = (patient.primary_insurance_data || "").split("::");
 
+  // Format amount with thousand separator
+  const formatAmount = (num: number) =>
+    num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
   // Charges table rows from data
-  const chargesRows = (data || []).map((row, idx) => `
+  const chargesRows = (data || []).map((row) => `
     <tr class="charge-row" style="border:none;">
       <td>${row.chg_date || ""}</td>
       <td>${row.price_code || ""}</td>
       <td style="border-left:none; border-right:none;">${row.Description || ""}</td>
       <td style="text-align:center;">${row.units || ""}</td>
-      <td style="text-align:right;">${row.amount != null ? parseFloat(row.amount).toFixed(2) : ""}</td>
+      <td style="text-align:right;">${row.amount != null ? formatAmount(parseFloat(row.amount)) : ""}</td>
     </tr>
   `).join("");
 
@@ -144,7 +148,7 @@ function getItemizedBillHtml(data: any[]): string {
         <tr>
             <td style="font-weight: bold; padding: 6px;"></td>
             <td style="font-weight: bold; padding: 6px; text-align: center;"></td>
-            <td style="width: 120px; font-weight: bold; padding: 6px; text-align: right; border-top: 1px solid #000;">${totalAmount.toFixed(2)}</td>
+            <td style="width: 120px; font-weight: bold; padding: 6px; text-align: right; border-top: 1px solid #000;">${formatAmount(totalAmount)}</td>
         </tr>
     </table>
 
@@ -152,7 +156,7 @@ function getItemizedBillHtml(data: any[]): string {
     <table class="no-border" style="width: 100%; margin: 15px 0; font-size: 11px;">
         <tr>
             <td style="font-weight: bold; padding: 6px;">Total Charges</td>
-            <td style="width: 120px; font-weight: bold; padding: 6px; text-align: right; border-top: 1px solid #000;">${totalAmount.toFixed(2)}</td>
+            <td style="width: 120px; font-weight: bold; padding: 6px; text-align: right; border-top: 1px solid #000;">${formatAmount(totalAmount)}</td>
         </tr>
     </table>
 
@@ -160,7 +164,7 @@ function getItemizedBillHtml(data: any[]): string {
     <table class="no-border" style="width: 100%; margin: 20px 0; font-size: 11px;">
         <tr>
             <td style="font-weight: bold; padding: 6px;">Amount Due:</td>
-            <td style="width: 120px; font-weight: bold; padding: 6px; text-align: right; border-top: 1px solid #000;">${totalAmount.toFixed(2)}</td>
+            <td style="width: 120px; font-weight: bold; padding: 6px; text-align: right; border-top: 1px solid #000;">${formatAmount(totalAmount)}</td>
         </tr>
     </table>
 </body>
