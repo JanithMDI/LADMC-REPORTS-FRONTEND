@@ -27,7 +27,15 @@ export function DatePicker({ date, onDateChange, placeholder = "Pick a date", cl
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0 bg-background">
-        <Calendar mode="single" selected={date} onSelect={onDateChange} initialFocus />
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={onDateChange}
+          initialFocus
+          captionLayout="dropdown"
+          fromYear={2000}
+          toYear={new Date().getFullYear()}
+        />
       </PopoverContent>
     </Popover>
   )
