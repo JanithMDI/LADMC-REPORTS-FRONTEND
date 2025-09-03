@@ -140,7 +140,7 @@ function getItemizedBillHtml(data: any[]): string {
     <table>
         <tr>
             <td style="width: 50%; padding:0 10px; border: 1px solid black; border-top: 0; vertical-align: top;">
-                <p style="font-size: 15px;">
+                <p style="font-size: 14px;">
                   ${patient.pat_name || ""}
                   <br>
                   ${
@@ -192,12 +192,12 @@ function getItemizedBillHtml(data: any[]): string {
             <td style="width: 30%; border-left: 1px solid black; font-weight: bold;">Policy Number</td>
         </tr>
         <tr>
-            <td>${primaryInsName}</td>
+            <td> 1.${primaryInsName}</td>
             <td>${plan}</td>
             <td>${primaryPolicyNo}</td>
         </tr>
-             <tr>
-            <td>${secondaryInsName}</td>
+        <tr>
+            <td> 2.${secondaryInsName}</td>
             <td>${secondaryPlan}</td>
             <td>${secondaryPolicyNo}</td>
         </tr>
