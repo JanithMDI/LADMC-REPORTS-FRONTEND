@@ -11,53 +11,20 @@ function getItemizedBillHtml(data: any[]): string {
   const formatAmount = (num: number) =>
     num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  // Group by Department
-  const grouped: Record<string, any[]> = {};
-  (data || []).forEach(row => {
-    if (!grouped[row.Department]) grouped[row.Department] = [];
-    grouped[row.Department].push(row);
-  });
-
-  // Build grouped rows with subtotals
-  let chargesRows = "";
-  Object.entries(grouped).forEach(([dept, rows]) => {
-    let deptTotal = 0;
-    chargesRows += rows.map(row => {
-    const date = row.chg_date
-      ? (() => {
-        const d = new Date(row.chg_date);
-        const mm = String(d.getMonth() + 1).padStart(2, "0");
-        const dd = String(d.getDate()).padStart(2, "0");
-        const yy = String(d.getFullYear()).slice(-2);
-        return `${mm}-${dd}-${yy}`;
-        })()
-      : "";
-      deptTotal += parseFloat(row.amount) || 0;
-      return `
+  // Charges table rows from data
+const chargesRows = (data || []).map((row) => {
+    const date = row.chg_date ? new Date(row.chg_date).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" }) : "";
+    return `
         <tr style="font-family: Courier New; font-size: 16px;">
-          <td style="width: 13%; padding-bottom: 0;">${date}</td>
-          <td style="width: 10%; padding-bottom: 0;">${row.price_code || ""}</td>
-          <td style="width: 40%; padding-bottom: 0;">${row.Description || ""}</td>
-          <td style="width: 7%; padding-bottom: 0;">${row.units || ""}</td>
-          <td style="width: 10%; padding-bottom: 0; text-align: right;"></td>
-          <td style="width: 10%; padding-bottom: 0; text-align: right;">${row.amount != null ? formatAmount(parseFloat(row.amount)) : ""}</td>
+            <td style="width: 10%; padding-bottom: 0;">${date}</td>
+            <td style="width: 10%; padding-bottom: 0;">${row.price_code || ""}</td>
+            <td style="width: 40%; padding-bottom: 0;">${row.Description || ""}</td>
+            <td style="width: 10%; padding-bottom: 0;">${row.units || ""}</td>
+            <td style="width: 10%; padding-bottom: 0; text-align: right;"></td>
+            <td style="width: 10%; padding-bottom: 0; text-align: right;">${row.amount != null ? formatAmount(parseFloat(row.amount)) : ""}</td>
         </tr>
-      `;
-    }).join("");
-
-      chargesRows += `<tr style="font-family: Courier New; font-size: 16px;">
-            <td>LAB</td>
-            <td colspan="4" style="text-align: center; ">DEPT ${dept} TOTALS</td>
-            <td  style="border-top: 1px solid black; text-align: right;">${formatAmount(deptTotal)}</td>
-        </tr>`;
-    // chargesRows += `
-    //   <tr style="font-family: Courier New; font-size: 16px; background:#f3f3f3;">
-    //     <td></td>
-    //     <td colspan="4" style="text-align: right; font-weight: bold;">Department ${dept} Subtotal</td>
-    //     <td style="text-align: right; font-weight: bold;">${formatAmount(deptTotal)}</td>
-    //   </tr>
-    // `;
-  });
+    `;
+}).join("");
 
   return `
 <!DOCTYPE html>
@@ -192,6 +159,18 @@ function getItemizedBillHtml(data: any[]): string {
             <td style="border-left: 1px solid black; font-weight: bold; text-align: center;">Amount</td>
         </tr>
         ${chargesRows}
+        <tr style="font-family: Courier New; font-size: 16px;">
+            <td>LAB</td>
+            <td colspan="4" style="text-align: center; ">DEPT 750 TOTALS</td>
+            <td  style="border-top: 1px solid black; text-align: right;">1,589.90</td>
+        </tr>
+         ${chargesRows}
+        <tr style="font-family: Courier New; font-size: 16px;">
+            <td>LAB</td>
+            <td colspan="4" style="text-align: center; ">DEPT 750 TOTALS</td>
+            <td  style="border-top: 1px solid black; text-align: right;">1,589.90</td>
+        </tr>
+        
         <tr style="font-family: Courier New; font-size: 16px;">
             <td colspan="5">Total Charges</td>
             <td style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(totalAmount)}</td>
