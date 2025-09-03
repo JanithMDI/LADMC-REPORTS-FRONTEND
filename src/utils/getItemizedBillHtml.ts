@@ -140,7 +140,25 @@ function getItemizedBillHtml(data: any[]): string {
     <table>
         <tr>
             <td style="width: 50%; padding:0 10px; border: 1px solid black; border-top: 0; vertical-align: top;">
-                <p style="font-size: 16px;">${patient.pat_name || ""} <br> ${patient.pat_address || ""}</p>
+                <p style="font-size: 15px;">
+                  ${patient.pat_name || ""}
+                  <br>
+                  ${
+                    patient.pat_address
+                      ? patient.pat_address
+                          .split(",")
+                          .map((line: string, idx: number, arr: string[]) =>
+                            line.trim()
+                              ? idx < arr.length - 1
+                                ? `${line.trim()},<br>`
+                                : `${line.trim()}<br>`
+                              : ""
+                          )
+                          .filter(Boolean)
+                          .join("")
+                      : ""
+                  }
+                </p>
             </td>
             <td style="width: 50%;  padding:0; border: 1px solid black; border-top: 0; vertical-align: top;">
                 <table>
