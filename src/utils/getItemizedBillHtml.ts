@@ -12,12 +12,12 @@ function getItemizedBillHtml(data: any[]): string {
 
   // Charges table rows from data
   const chargesRows = (data || []).map((row) => `
-    <tr class="charge-row" style="border:none;">
-      <td>${row.chg_date || ""}</td>
-      <td>${row.price_code || ""}</td>
-      <td style="border-left:none; border-right:none;">${row.Description || ""}</td>
-      <td style="text-align:center;">${row.units || ""}</td>
-      <td style="text-align:right;">${row.amount != null ? formatAmount(parseFloat(row.amount)) : ""}</td>
+    <tr style="font-family: Courier New; font-size: 16px;"">
+      <td style="width: 10%; padding-bottom: 0;">${row.chg_date || ""}</td>
+      <td style="width: 10%; padding-bottom: 0;">${row.price_code || ""}</td>
+      <td style="width: 40%; padding-bottom: 0;">${row.Description || ""}</td>
+      <td style="width: 10%; padding-bottom: 0;">${row.units || ""}</td>
+      <td style="width: 10%; padding-bottom: 0; text-align: right;">${row.amount != null ? formatAmount(parseFloat(row.amount)) : ""}</td>
     </tr>
   `).join("");
 
@@ -78,9 +78,9 @@ function getItemizedBillHtml(data: any[]): string {
                     <tr>
                         <td style="border: 1px solid black;">DISCHARGE BILL</td>
                         <td style="border: 1px solid black;font-weight: bold; background-color: #B7B7B7;">Statement Of Account Of</td>
-                        <td style="border: 1px solid black;">RODRICK D. WOODS</td>
+                        <td style="border: 1px solid black;">${patient.pat_name || ""}</td>
                         <td style="border: 1px solid black;font-weight: bold; background-color: #B7B7B7;">Date</td>
-                        <td style="border: 1px solid black; border-right: 0;">05-08-2024</td>
+                        <td style="border: 1px solid black; border-right: 0;">${new Date().toISOString().slice(0, 10)}</td>
                     </tr>
                 </table>
             </td>
@@ -99,7 +99,7 @@ function getItemizedBillHtml(data: any[]): string {
     <table>
         <tr>
             <td style="width: 50%; padding:0 10px; border: 1px solid black; border-top: 0; vertical-align: top;">
-                <p style="font-size: 16px;">RODRICK D. WOODS <br> 4333 TORRANCE BLVD <br> TORRANCE CARE CTR W <br> TORRANCE, CA 90503 0</p>
+                <p style="font-size: 16px;">${patient.pat_name || ""} <br> ${patient.pat_address || ""}</p>
             </td>
             <td style="width: 50%;  padding:0; border: 1px solid black; border-top: 0; vertical-align: top;">
                 <table>
@@ -109,17 +109,17 @@ function getItemizedBillHtml(data: any[]): string {
                         <td style="width: 40%; padding: 10px; border: 1px solid black; border-top: 0; font-weight: bold;">Discharge Date</td>
                     </tr>
                     <tr>
-                        <td>7155066</td>
-                        <td>03-04-2024</td>
-                        <td>03-04-2024</td>
+                        <td>${patient.visit_no || ""}</td>
+                        <td>${patient.admit_date || ""}</td>
+                        <td>${patient.dischg_date || ""}</td>
                     </tr>
                     <tr style="background-color: #B7B7B7;">
                         <td style="padding: 10px; border: 1px solid black; border-left: 0; font-weight: bold;">Date of Birth</td>
                         <td colspan="2" style="padding: 10px; border: 1px solid black; font-weight: bold;">Physician</td>
                     </tr>
                     <tr>
-                        <td>10-02-1950</td>
-                        <td>MISCELLANEOUS MD</td>
+                        <td>${patient.birth_date || ""}</td>
+                        <td>${patient.phy_name || ""}</td>
                     </tr>
                 </table>
             </td>
@@ -133,14 +133,9 @@ function getItemizedBillHtml(data: any[]): string {
             <td style="width: 30%; border-left: 1px solid black; font-weight: bold;">Policy Number</td>
         </tr>
         <tr>
-            <td style="padding-bottom: 0;">1. HEALTH NET - MEDI-CAL</td>
-            <td style="padding-bottom: 0;">HEALTH NET MCAL DIRE</td>
-            <td style="padding-bottom: 0;">98941518E</td>
-        </tr>
-        <tr>
-            <td style="border-bottom: 0;">2. MEDICARE O/P</td>
-            <td style="border-bottom: 0;">MEDICARE PART B ONLY</td>
-            <td style="border-bottom: 0; ">2FD7HN1WU46</td>
+            <td>${primaryInsName}</td>
+            <td>Plan</td>
+            <td>${primaryPolicyNo}</td>
         </tr>
     </table>
 
@@ -153,67 +148,26 @@ function getItemizedBillHtml(data: any[]): string {
             <td style="border-left: 1px solid black; font-weight: bold;">Rate</td>
             <td style="border-left: 1px solid black; font-weight: bold; text-align: center;">Amount</td>
         </tr>
-        <tr style="font-family: Courier New; font-size: 16px;">
-            <td style="width: 15%; padding-bottom: 0; ">03-04-24</td>
-            <td style="width: 10%; padding-bottom: 0; ">750301150</td>
-            <td style="width: 35%; padding-bottom: 0; ">VALPROIC ACID</td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: center;">1</td>
-            <td style="width: 10%; padding-bottom: 0; "></td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: right;">196.35</td>
-        </tr>
-        <tr style="font-family: Courier New; font-size: 16px;">
-            <td style="width: 10%; padding-bottom: 0; ">03-04-24</td>
-            <td style="width: 10%; padding-bottom: 0; ">750301543</td>
-            <td style="width: 40%; padding-bottom: 0; ">HGB A1C</td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: center;">1</td>
-            <td style="width: 10%; padding-bottom: 0; "></td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: right;">155.93</td>
-        </tr>
-        <tr style="font-family: Courier New; font-size: 16px;">
-            <td style="width: 10%; padding-bottom: 0; ">03-04-24</td>
-            <td style="width: 10%; padding-bottom: 0; ">750301543</td>
-            <td style="width: 40%; padding-bottom: 0; ">HGB A1C</td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: center;">1</td>
-            <td style="width: 10%; padding-bottom: 0; "></td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: right;">155.93</td>
-        </tr>
-        
+        ${chargesRows}
         <tr style="font-family: Courier New; font-size: 16px;">
             <td>LAB</td>
             <td colspan="4" style="text-align: center; ">DEPT 750 TOTALS</td>
             <td  style="border-top: 1px solid black; text-align: right;">1,589.90</td>
         </tr>
-
+         ${chargesRows}
         <tr style="font-family: Courier New; font-size: 16px;">
-            <td style="width: 10%; padding-bottom: 0; ">03-04-24</td>
-            <td style="width: 10%; padding-bottom: 0; ">750301150</td>
-            <td style="width: 40%; padding-bottom: 0; ">VALPROIC ACID</td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: center;">1</td>
-            <td style="width: 10%; padding-bottom: 0; "></td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: right;">196.35</td>
-        </tr>
-        <tr style="font-family: Courier New; font-size: 16px;">
-            <td style="width: 10%; padding-bottom: 0; ">03-04-24</td>
-            <td style="width: 10%; padding-bottom: 0; ">750301543</td>
-            <td style="width: 40%; padding-bottom: 0; ">HGB A1C</td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: center;">1</td>
-            <td style="width: 10%; padding-bottom: 0; "></td>
-            <td style="width: 10%; padding-bottom: 0; ; text-align: right;">155.93</td>
-        </tr>
-        
-        <tr style="font-family: Courier New; font-size: 16px;">
-            <td>LAB - 2</td>
+            <td>LAB</td>
             <td colspan="4" style="text-align: center; ">DEPT 750 TOTALS</td>
-            <td style="border-top: 1px solid black; text-align: right;">1,589.90</td>
+            <td  style="border-top: 1px solid black; text-align: right;">1,589.90</td>
         </tr>
         
         <tr style="font-family: Courier New; font-size: 16px;">
             <td colspan="5">Total Charges</td>
-            <td style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">1,589.90</td>
+            <td style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(totalAmount)}</td>
         </tr>
         <tr style="font-family: Courier New; font-size: 16px;">
             <td colspan="4" style="text-align: center;">Amount Due:</td>
-            <td colspan="2" style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">1,589.90</td>
+            <td colspan="2" style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(totalAmount)}</td>
         </tr>
     </table>
 </body>
