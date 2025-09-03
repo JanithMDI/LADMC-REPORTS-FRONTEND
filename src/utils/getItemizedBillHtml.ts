@@ -11,6 +11,16 @@ function getItemizedBillHtml(data: any[]): string {
   const formatAmount = (num: number) =>
     num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+  // Helper for date formatting: MM-DD-YYYY
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const yyyy = d.getFullYear();
+    return `${mm}-${dd}-${yyyy}`;
+  };
+
   // Group by Department
   const grouped: Record<string, any[]> = {};
   (data || []).forEach(row => {
@@ -45,18 +55,11 @@ function getItemizedBillHtml(data: any[]): string {
       `;
     }).join("");
 
-      chargesRows += `<tr style="font-family: Courier New; font-size: 16px;">
+    chargesRows += `<tr style="font-family: Courier New; font-size: 16px;">
             <td>LAB</td>
             <td colspan="4" style="text-align: center; ">DEPT ${dept} TOTALS</td>
             <td  style="border-top: 1px solid black; text-align: right;">${formatAmount(deptTotal)}</td>
         </tr>`;
-    // chargesRows += `
-    //   <tr style="font-family: Courier New; font-size: 16px; background:#f3f3f3;">
-    //     <td></td>
-    //     <td colspan="4" style="text-align: right; font-weight: bold;">Department ${dept} Subtotal</td>
-    //     <td style="text-align: right; font-weight: bold;">${formatAmount(deptTotal)}</td>
-    //   </tr>
-    // `;
   });
 
   return `
@@ -118,7 +121,7 @@ function getItemizedBillHtml(data: any[]): string {
                         <td style="border: 1px solid black;font-weight: bold; background-color: #B7B7B7;">Statement Of Account Of</td>
                         <td style="border: 1px solid black;">${patient.pat_name || ""}</td>
                         <td style="border: 1px solid black;font-weight: bold; background-color: #B7B7B7;">Date</td>
-                        <td style="border: 1px solid black; border-right: 0;">${new Date().toISOString().slice(0, 10)}</td>
+                        <td style="border: 1px solid black; border-right: 0;">${formatDate(new Date().toISOString().slice(0, 10))}</td>
                     </tr>
                 </table>
             </td>
@@ -148,15 +151,15 @@ function getItemizedBillHtml(data: any[]): string {
                     </tr>
                     <tr>
                         <td>${patient.visit_no || ""}</td>
-                        <td>${patient.admit_date || ""}</td>
-                        <td>${patient.dischg_date || ""}</td>
+                        <td>${formatDate(patient.admit_date)}</td>
+                        <td>${formatDate(patient.dischg_date)}</td>
                     </tr>
                     <tr style="background-color: #B7B7B7;">
                         <td style="padding: 10px; border: 1px solid black; border-left: 0; font-weight: bold;">Date of Birth</td>
                         <td colspan="2" style="padding: 10px; border: 1px solid black; font-weight: bold;">Physician</td>
                     </tr>
                     <tr>
-                        <td>${patient.birth_date || ""}</td>
+                        <td>${formatDate(patient.birth_date)}</td>
                         <td>${patient.phy_name || ""}</td>
                     </tr>
                 </table>
