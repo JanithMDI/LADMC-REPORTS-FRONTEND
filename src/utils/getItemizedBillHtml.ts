@@ -56,7 +56,7 @@ function getItemizedBillHtml(data: any[]): string {
     }).join("");
 
     chargesRows += `<tr style="font-family: Courier New; font-size: 16px;">
-            <td>LAB</td>
+            <td></td>
             <td colspan="4" style="text-align: center; ">DEPT ${dept} TOTALS</td>
             <td  style="border-top: 1px solid black; text-align: right;">${formatAmount(deptTotal)}</td>
         </tr>`;
@@ -139,7 +139,7 @@ function getItemizedBillHtml(data: any[]): string {
 
     <table>
         <tr>
-            <td style="width: 50%; padding:0 10px; border: 1px solid black; border-top: 0; vertical-align: middle;">
+             <td style="width: 30%; padding:0 10px; border: 1px solid black;  border-bottom: 0;  vertical-align: middle;">
                 <p style="font-size: 14px; margin: 0; display: flex; flex-direction: column; justify-content: center; height: 100%;">
                   ${patient.pat_name || ""}
                   <br>
@@ -159,6 +159,22 @@ function getItemizedBillHtml(data: any[]): string {
                       : ""
                   }
                 </p>
+            </td>
+            <td style="width: 20%; padding:0;  vertical-align: top;">
+                <table>
+                    <tr style="background-color: #B7B7B7; border-bottom: 1px solid black;">
+                        <td>Primary Contact Number</td>
+                    </tr>
+                    <tr>
+                        <td>${patient.patient_phone || ""}</td>
+                    </tr>
+                    <tr style="background-color: #B7B7B7; border: 1px solid black; border-left: 0; border-right: 0;">
+                        <td>Secondary Contact Number</td>
+                    </tr>
+                    <tr>
+                         <td>${patient.emerg_con_phone_1 || ""}</td>
+                    </tr>
+                </table>
             </td>
             <td style="width: 50%;  padding:0; border: 1px solid black; border-top: 0; vertical-align: top;">
                 <table>
@@ -192,14 +208,14 @@ function getItemizedBillHtml(data: any[]): string {
             <td style="width: 30%; border-left: 1px solid black; font-weight: bold;">Policy Number</td>
         </tr>
         <tr>
-            <td> 1.${primaryInsName}</td>
+            <td> <b>1. </b>${primaryInsName}</td>
             <td>${plan}</td>
             <td>${primaryPolicyNo}</td>
         </tr>
         ${
           secondaryInsName
             ? `<tr>
-                <td> 2.${secondaryInsName}</td>
+                <td> <b>2. </b>${secondaryInsName}</td>
                 <td>${secondaryPlan}</td>
                 <td>${secondaryPolicyNo}</td>
               </tr>`

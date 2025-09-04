@@ -8,10 +8,17 @@ const Appbar = () => {
       <Link to="/dashboard">
         <img src={Logo} alt="" />
       </Link>
-      <Link type='button' to={'/'} className='flex items-center px-4 py-2 gap-3 rounded-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive '>
-        <LogOut size={20}/>
+      <button
+        type="button"
+        onClick={() => {
+          localStorage.removeItem('jwtToken');
+          window.location.href = '/';
+        }}
+        className="flex items-center px-4 py-2 gap-3 rounded-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+      >
+        <LogOut size={20} />
         Sign out
-      </Link>
+      </button>
     </div>
   )
 }

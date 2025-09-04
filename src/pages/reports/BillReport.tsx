@@ -53,20 +53,88 @@ export default function BillReport() {
 
   const handleDownloadPdfFile = () => {
     if (!previewHtml) return;
-    // Inject print CSS for landscape A4 and hide browser header/footer (date/title)
+    // Custom footer: page number right with extra margin, report name center
+    const now = new Date();
+    const dateTimeStr = now.toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    const reportName = "LADMC Medical Invoicess";
     const portraitCss = `
       <style>
         @media print {
           @page {
             size: A4 landscape;
-            margin: 10px;
+            margin: 10mm 0mm 16mm 0mm;
           }
           body {
             margin: 0;
           }
+          .custom-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100vw;
+            height: 28px;
+            background: #fff;
+            z-index: 9999;
+            border-top: 1px solid #888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 500;
+            padding-bottom: 0;
+          }
+          .footer-content {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 0 40px; /* Increased padding for page number space */
+          }
+          .footer-report {
+            flex: 1;
+            text-align: center;
+            font-weight: 500;
+          }
+          .footer-page {
+            position: absolute;
+            right: 40px; /* Increased margin right */
+            font-weight: 400;
+          }
+          body {
+            padding-bottom: 28px;
+          }
+          .page-break {
+            page-break-before: always;
+            margin-top: 60px !important;
+          }
+        }
+        @page {
+          @bottom-center {
+            content: "${reportName}";
+          }
+          @bottom-right {
+            content: "Page " counter(page) " / " counter(pages);
+            padding-right: 40px; /* Increased margin right */
+          }
+          @bottom-left { 
+            content: "${dateTimeStr}";
+            padding-left: 40px; /* Increased margin right */
+         }
         }
       </style>
     `;
+    // Optionally, you can add <div class="page-break"></div> in your HTML template where you want a new page with margin-top.
+    // Or, if you want to add margin-top after every page except the first, you can add this class to your template logic.
+
     const printWindow = window.open("", "_blank");
     if (printWindow) {
       printWindow.document.open();
@@ -136,3 +204,4 @@ export default function BillReport() {
     </div>
   )
 }
+
