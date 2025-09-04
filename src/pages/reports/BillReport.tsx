@@ -53,12 +53,26 @@ export default function BillReport() {
 
   const handleDownloadPdfFile = () => {
     if (!previewHtml) return;
+    // Inject print CSS for landscape A4 and hide browser header/footer (date/title)
+    const portraitCss = `
+      <style>
+        @media print {
+          @page {
+            size: A4 landscape;
+            margin: 10px;
+          }
+          body {
+            margin: 0;
+          }
+        }
+      </style>
+    `;
     const printWindow = window.open("", "_blank");
     if (printWindow) {
-      printWindow.document.write(previewHtml);
+      printWindow.document.open();
+      printWindow.document.write(portraitCss + previewHtml);
       printWindow.document.close();
       printWindow.focus();
-      // Wait for content to render before printing
       setTimeout(() => {
         printWindow.print();
       }, 500);

@@ -81,7 +81,7 @@ function getItemizedBillHtml(data: any[]): string {
       }
     </style>
 </head>
-<body style=" font-family: Arial, sans-serif; margin: 20px; font-size: 11px; line-height: 1.2;">
+<body style=" font-family: Arial, sans-serif; margin: 20px; font-size: 11px; line-height: 1.2; padding-bottom: 40px;">
     <table>
         <tr>
             <td style="width: 40%;">
@@ -139,8 +139,8 @@ function getItemizedBillHtml(data: any[]): string {
 
     <table>
         <tr>
-            <td style="width: 50%; padding:0 10px; border: 1px solid black; border-top: 0; vertical-align: top;">
-                <p style="font-size: 14px;">
+            <td style="width: 50%; padding:0 10px; border: 1px solid black; border-top: 0; vertical-align: middle;">
+                <p style="font-size: 14px; margin: 0; display: flex; flex-direction: column; justify-content: center; height: 100%;">
                   ${patient.pat_name || ""}
                   <br>
                   ${
@@ -196,11 +196,15 @@ function getItemizedBillHtml(data: any[]): string {
             <td>${plan}</td>
             <td>${primaryPolicyNo}</td>
         </tr>
-        <tr>
-            <td> 2.${secondaryInsName}</td>
-            <td>${secondaryPlan}</td>
-            <td>${secondaryPolicyNo}</td>
-        </tr>
+        ${
+          secondaryInsName
+            ? `<tr>
+                <td> 2.${secondaryInsName}</td>
+                <td>${secondaryPlan}</td>
+                <td>${secondaryPolicyNo}</td>
+              </tr>`
+            : ""
+        }
     </table>
 
     <table>
