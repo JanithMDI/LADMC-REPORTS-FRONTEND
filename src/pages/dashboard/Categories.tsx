@@ -17,9 +17,9 @@ export const Categories = () => {
         { title: "Core Measures", img: ImgCoreMeasures,  path:'/report/category4' },
     ]
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="w-[60dvw] mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
         {category.map((cat, index) => (
-            <Link key={index} to={cat.path} className="p-4 h-[46dvh] relative bg-secondary border border-border overflow-hidden rounded-lg">
+            <Link key={index} to={cat.path} className="p-4 h-[36dvh]  relative bg-secondary border border-border overflow-hidden rounded-lg">
                 <img src={cat.img} className="absolute h-full w-full top-0 left-0 object-cover" alt={cat.title} />
                 <div className="p-4 absolute bottom-4 left-4 ">
                     <h2 className="text-xl md:text-4xl text-white font-semibold">{cat.title}</h2>
