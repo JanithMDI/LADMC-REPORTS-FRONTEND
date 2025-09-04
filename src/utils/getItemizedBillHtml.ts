@@ -139,7 +139,7 @@ function getItemizedBillHtml(data: any[]): string {
 
     <table>
         <tr>
-            <td style="width: 50%; padding:0 10px; border: 1px solid black; border-top: 0; border-bottom: 0;  vertical-align: middle;">
+            <td style="width: 30%; padding:0 10px; border: 1px solid black;  border-bottom: 0;  vertical-align: middle;">
                 <p style="font-size: 14px; margin: 0; display: flex; flex-direction: column; justify-content: center; height: 100%;">
                   ${patient.pat_name || ""}
                   <br>
@@ -176,7 +176,7 @@ function getItemizedBillHtml(data: any[]): string {
                     </tr>
                 </table>
             </td>
-            <td style="width: 50%;  padding:0; border: 1px solid black; border-top: 0; border-bottom: 0; vertical-align: top;">
+            <td style="width: 50%;  padding:0; border: 1px solid black;  border-bottom: 0; vertical-align: top;">
                 <table>
                     <tr style="background-color: #B7B7B7;">
                         <td style="padding: 10px; border: 1px solid black; border-top: 0; border-left: 0; font-weight: bold;">Visit number</td>
