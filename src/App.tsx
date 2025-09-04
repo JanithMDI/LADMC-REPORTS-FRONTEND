@@ -1,14 +1,15 @@
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Login } from './pages/auth/login';
 import { Dashboard } from './pages/dashboard/Dashboard';
 import Report from './pages/reports/Report';
 
 function App() {
-  const navigate = useNavigate();
+  const location = useLocation();
+  const isProtectedRoute = location.pathname.startsWith("/dashboard") || location.pathname.startsWith("/report/");
 
-  // Redirect to root if jwtToken not found
-  if (!localStorage.getItem("jwtToken")) {
-    navigate("/");
+  // Redirect to root if jwtToken not found and on protected route
+  if (isProtectedRoute && !localStorage.getItem("jwtToken")) {
+    window.location.replace("/");
     return null;
   }
 
