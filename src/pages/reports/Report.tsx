@@ -12,14 +12,31 @@ import BillReport from "./BillReport"
 import PayorReportTable from "./PayorReportTable"
 
 export default function Report() {
-  const [startDate, setStartDate] = useState<Date | undefined>(new Date(2025, 7, 10)) // Aug 10, 2025
-  const [endDate, setEndDate] = useState<Date | undefined>(new Date(2025, 7, 27)) // Aug 27, 2025
+  // Default dates: yesterday and day before yesterday
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const dayBeforeYesterday = new Date(today);
+  dayBeforeYesterday.setDate(today.getDate() - 2);
+
+  const [startDate, setStartDate] = useState<Date | undefined>(dayBeforeYesterday)
+  const [endDate, setEndDate] = useState<Date | undefined>(yesterday)
   const [reportData, setReportData] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const { reportType } = useParams()
   
   const handleGenerate = async () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (startDate && startDate >= today) {
+      setError("Start date should be before today");
+      return;
+    }
+    if (endDate && endDate >= today) {
+      setError("End date should be before today");
+      return;
+    }
     if (startDate && endDate && endDate < startDate) {
       setError("End date should be greater than or equal to start date")
       return

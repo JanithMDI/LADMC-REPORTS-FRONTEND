@@ -3,13 +3,15 @@ import { Button } from "../../components/ui/button"
 import { exportReportPDF } from "../../services/reportService"
 import { Label } from "../../components/ui/label"
 import Loader from "../../components/ui/Loader"
+import getItemizedBillHtml from "../../utils/getItemizedBillHtml"
 
 export default function BillReport() {
   const [downloading, setDownloading] = useState(false)
   const [dots, setDots] = useState(1)
   const [reference, setReference] = useState("")
-  const [pdfUrl, ] = useState<string | null>(null)
   const [error, setError] = useState("")
+  const [records, setRecords] = useState<any[]>([])
+  const [previewHtml, setPreviewHtml] = useState<string | null>(null)
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined
@@ -31,19 +33,57 @@ export default function BillReport() {
     setDownloading(true)
     setError("")
     try {
-      await exportReportPDF(reference)
+      const res = await exportReportPDF(reference)
+      if (res?.data && Array.isArray(res.data) && res.data.length > 0) {
+        setRecords(res.data)
+        setPreviewHtml(getItemizedBillHtml(res.data))
+      } else {
+        setRecords([])
+        setPreviewHtml(null)
+        setError("No record found on this id")
+      }
     } catch {
+      setRecords([])
+      setPreviewHtml(null)
       setError("No record found on this id")
     } finally {
       setDownloading(false)
     }
   }
 
+  const handleDownloadPdfFile = () => {
+    if (!previewHtml) return;
+    // Inject print CSS for landscape A4 and hide browser header/footer (date/title)
+    const portraitCss = `
+      <style>
+        @media print {
+          @page {
+            size: A4 landscape;
+            margin: 10px;
+          }
+          body {
+            margin: 0;
+          }
+        }
+      </style>
+    `;
+    const printWindow = window.open("", "_blank");
+    if (printWindow) {
+      printWindow.document.open();
+      printWindow.document.write(portraitCss + previewHtml);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => {
+        printWindow.print();
+      }, 500);
+    }
+  };
+
   useEffect(() => {
     return () => {
-      if (pdfUrl) window.URL.revokeObjectURL(pdfUrl)
+      if (previewHtml) window.URL.revokeObjectURL(previewHtml)
     }
-  }, [pdfUrl])
+  }, [previewHtml])
 
   return (
     <div className="flex flex-col gap-6">
@@ -65,20 +105,28 @@ export default function BillReport() {
           disabled={downloading || !reference}
           style={{marginBottom: "8px"}}
         >
-          { "Download PDF"}
+          { "Show Bill" }
+        </Button>
+        <Button
+          onClick={handleDownloadPdfFile}
+          className="bg-secondary h-10 text-secondary-foreground"
+          disabled={records.length === 0}
+          style={{marginBottom: "8px"}}
+        >
+          { "Download PDF" }
         </Button>
       </div>
       {downloading && (
-        <Loader message={`Downloading${'.'.repeat(dots)}`} />
+        <Loader message={`Loading ${'.'.repeat(dots)}`} />
       )}
       {error && (
         <div className="text-red-500 mt-2">{error}</div>
       )}
-      {pdfUrl && (
-        <div className="border rounded mt-4 w-full" style={{ height: "600px" }}>
+      {previewHtml && (
+        <div className="border rounded mt-4 w-full" style={{ height: "900px" }}>
           <iframe
-            src={pdfUrl}
-            title="PDF Preview"
+            srcDoc={previewHtml}
+            title="Itemized Bill Preview"
             width="100%"
             height="100%"
             style={{ border: "none" }}
@@ -88,4 +136,3 @@ export default function BillReport() {
     </div>
   )
 }
-   

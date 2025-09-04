@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "http://localhost:3001/api", // Updated base URL
+  baseURL: "https://ladmc-reports.elifeamerica.com/api", // Updated base URL
 })
 
 // Add a request interceptor to include JWT token
