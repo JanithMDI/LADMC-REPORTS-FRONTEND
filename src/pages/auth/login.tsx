@@ -1,5 +1,5 @@
 
-import Logo from '../../assets/ladmc-report-logo.svg'
+import Logo from '../../assets/4js-logo.svg'
 import { LoginForm } from './LoginForm'
 
 export const Login = () => {

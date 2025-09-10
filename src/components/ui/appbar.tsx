@@ -1,12 +1,12 @@
 import { LogOut } from 'lucide-react'
-import Logo from '../../assets/ladmc-report-logo.svg'
+import Logo from '../../assets/4js-logo.svg'
 import { Link } from 'react-router-dom'
 
 const Appbar = () => {
   return (
     <div className='px-4 md:px-6 w-full h-16 flex justify-between items-center bg-secondary border-b border-border'>
       <Link to="/dashboard">
-        <img src={Logo} alt="" />
+        <img src={Logo} alt="LADMC-4JS-LOGO" />
       </Link>
       <button
         type="button"
