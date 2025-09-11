@@ -6,7 +6,7 @@ const Appbar = () => {
   return (
     <div className='px-4 md:px-6 w-full h-16 flex justify-between items-center bg-secondary border-b border-border'>
       <Link to="/dashboard">
-        <img src={Logo} alt="LADMC-4JS-LOGO" className='h-12' />
+        <img src={Logo} alt="LADMC-4JS-LOGO" className='h-15' />
       </Link>
       <button
         type="button"
