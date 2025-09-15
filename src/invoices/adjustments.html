@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LADMC Medical Invoice</title>
+    <style>
+        body{
+            font-family: Courier New; font-size: 16px; 
+        }
+        table {
+            width: 100%; border-collapse: collapse; padding: 0; margin: 0;border-spacing: 14px ;border-collapse: separate; vertical-align: top;
+        }
+        p {
+            margin: 0; padding: 0;
+        }
+        
+        /* Ensure background colors are printed */
+      @media print {
+        th, td, tr.charge-row { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        @page { margin: 10px; page-break-inside: avoid;}
+      }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <table style="border-spacing: 0;">
+        <tr>
+            <td style="width: 20%;">
+                <p>Date: 05/06/2024</p>
+                <p>Time: 18:53</p>
+            </td>
+            <td style="width: 40%; text-align: center;">
+                <p>Adjustments By Transaction Type</p>
+                <p>L.A. DOWNTOWN MEDICAL CENTER</p>
+            </td>
+            <td style="width: 20%; text-align: right;">
+                <p>Page:1</p>
+                <p>adj/o_padjt</p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center; padding: 0;">
+                <p>Processing Dates From: 01/01/2024 Through 03/31/2024</p>
+            </td>
+        </tr>
+    </table>
+    <!-- Devider -->
+     <table style="border-spacing: 0;">
+        <tr>
+            <td colspan="3" style="border-bottom:2px dashed #888;">&nbsp;</td>
+        </tr>
+     </table>
+    <!-- Data -->
+     <table >
+        <tr>
+            <td>Transaction Type: 163 - HMO INS PMT IP</td>
+            <td align="right">2</td>
+            <td align="right">-25.00</td>
+        </tr>
+        <tr>
+            <td>Transaction Type: 169 - INSURANCE/EPO PMT IP</td>
+            <td align="right">1</td>
+            <td align="right">2,122.53</td>
+        </tr>
+        <tr>
+            <td>Transaction Type: 190 - MEDICARE PMT IP</td>
+            <td align="right">10</td>
+            <td align="right">221,387.49</td>
+        </tr>
+        <tr>
+            <td>Transaction Type: 217 - MEDICARE BD WO</td>
+            <td align="right">239</td>
+            <td align="right">-459,875.08</td>
+        </tr>
+        <tr>
+            <td>Transaction Type: 604 - BX/REV MGD ADJ</td>
+            <td align="right">1</td>
+            <td align="right">-146.30</td>
+        </tr>
+        <tr>
+            <td>Transaction Type: 607 - LATE CHARGE</td>
+            <td align="right">208</td>
+            <td align="right">-134,868.02</td>
+        </tr>
+        <tr>
+            <td>Transaction Type: 615 - BLUE SHIELD INS CONT</td>
+            <td align="right">6</td>
+            <td align="right">1,820.62</td>
+        </tr>
+        <tr>
+            <td>Transaction Type: 617 - MCARE CONT IP INGLES</td>
+            <td align="right">366</td>
+            <td align="right">-4,334,433.81</td>
+        </tr>
+        <tr>
+            <td>Transaction Type: 618 - MCAL CONT PEND IP-E</td>
+            <td align="right">5</td>
+            <td align="right">-169,787.85</td>
+        </tr>
+        <tr>
+            <td>Transaction Type: 620 - MCARE CONT OP LADMC</td>
+            <td align="right">401</td>
+            <td align="right">-831,138.63</td>
+        </tr>
+        <tr>
+            <td colspan="3">&nbsp;</td>
+        </tr>
+        <!-- Total -->
+        <tr>
+            <td style="vertical-align: top;">Total Adjustments By Processing Date For All Facilities Selected</td>
+            <td align="right" style="border-top:2px dashed #888;">9,317</td>
+            <td align="right" style="border-top:2px dashed #888;">-55,628,720.66</td>
+        </tr>
+     </table>
+     
+</body>

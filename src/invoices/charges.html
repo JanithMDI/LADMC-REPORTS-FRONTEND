@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LADMC Medical Invoice</title>
+    <style>
+        body{
+            font-family: Courier New; font-size: 16px; 
+        }
+        table {
+            width: 100%; padding: 0; margin: 0;border-spacing: 10px ;border-collapse: separate; vertical-align: top;
+        }
+        p {
+            margin: 0; padding: 0;
+        }
+        tr,td {
+            padding: 0;
+        }
+        /* Ensure background colors are printed */
+      @media print {
+        th, td, tr.charge-row { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        @page { margin: 10px; page-break-inside: avoid;}
+      }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <table style="border-spacing: 0;">
+        <tr>
+            <td style="width: 20%;">
+                <p>Date: 05/06/2024</p>
+                <p>Time: 18:53</p>
+            </td>
+            <td style="width: 40%; text-align: center;">
+                <p>Patient Summary By Primary Fin Class/ PS</p>
+                <p>L.A. DOWNTOWN MEDICAL CENTER</p>
+            </td>
+            <td style="width: 20%; text-align: right;">
+                <p>Page:1</p>
+                <p>o_psum8</p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center; padding: 0;">
+                <p>Processing Dates From: 01/01/2024 Through 03/31/2024</p>
+            </td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td>chmadmtr . pat stat</td>
+        </tr>
+    </table>
+    <!-- Devider -->
+     <table style="border-spacing: 0;">
+        <tr>
+            <td colspan="3" style="border:2px dashed #888; border-left: 0; border-right: 0; padding: 8px 0;">
+                <p>Total Patients By Patient Status For Each Primary Financial Class</p>
+            </td>
+        </tr>
+     </table>
+
+    <!-- Data -->
+     <table>
+        <!-- Table Header -->
+        <tr>
+            <td align="center">Patient Status Code</td>
+            <td align="right">Patients</td>
+            <td align="right">Days</td>
+            <td align="right">Charges</td>
+        </tr>
+        <!-- Group title -->
+        <tr>
+            <td>Financial Class : BC BLUE CROSS</td>
+        </tr>
+        <!-- Group Data -->
+        <tr>
+            <td style="padding-left: 8%;"> AIC - BILLED PSYCH</td>
+            <td align="right">5</td>
+            <td align="right">48</td>
+            <td align="right">149,138.01</td>
+        </tr>
+        <!-- Group total -->
+         <tr>
+            <td></td>
+            <td align="right">------</td>
+            <td align="right">------</td>
+            <td align="right">------</td>
+         </tr>
+        <tr>
+            <td style="padding-left: 12%;"> Financial Class Total:</td>
+            <td align="right">5</td>
+            <td align="right">48</td>
+            <td align="right">149,138.01</td>
+        </tr>
+        <!-- Group End -->
+
+        <!-- Deiveder ============================================================== -->
+        <tr>
+            <td colspan="4">&nbsp;</td>
+        </tr>
+        <!-- Group title -->
+        <tr>
+            <td colspan="4">Financial Class : CI COMMERCIAL INSURANCE</td>
+        </tr>
+        <!-- Group Data -->
+        <tr>
+            <td style="padding-left: 8%;"> AIC - BILLED PSYCH</td>
+            <td align="right">5</td>
+            <td align="right">48</td>
+            <td align="right">149,138.01</td>
+        </tr>
+        <tr>
+            <td style="padding-left: 8%;"> AIY - BILLED DC PSYCH</td>
+            <td align="right">5</td>
+            <td align="right">48</td>
+            <td align="right">149,138.01</td>
+        </tr>
+        <!-- Group total -->
+         <tr>
+            <td></td>
+            <td align="right">------</td>
+            <td align="right">------</td>
+            <td align="right">------</td>
+         </tr>
+        <tr>
+            <td style="padding-left: 12%;"> Financial Class Total:</td>
+            <td align="right">5</td>
+            <td align="right">48</td>
+            <td align="right">149,138.01</td>
+        </tr>
+
+         <!-- Grand Deiveder ============================================================== -->
+        <tr>
+            <td colspan="4">&nbsp;</td>
+        </tr>
+        <tr>
+            <tr>
+                <td></td>
+                <td align="right">------</td>
+                <td align="right">------</td>
+                <td align="right">------</td>
+            </tr>
+            <td style="padding-left: 12%;"> Grand Total:</td>
+            <td align="right">1,675</td>
+            <td align="right">14,948</td>
+            <td align="right">$62,149,138.01</td>
+        </tr>
+     </table>
+
+</body>
