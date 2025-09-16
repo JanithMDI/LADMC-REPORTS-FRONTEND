@@ -70,3 +70,25 @@ export async function downloadReportPDF(reference?: string) {
   link.remove()
   window.URL.revokeObjectURL(url)
 }
+
+
+export async function fetchPaymentByTransactionType(startDate: any, endDate: any) {
+  const response = await api.get("/report/payment-by-transaction-type", {
+    params: { startDate, endDate },
+  });
+  return response.data;
+}
+
+export async function fetchAdjustmentByTransactionType(startDate: any, endDate: any) {
+  const response = await api.get("/report/adjustment-by-transaction-type", {
+    params: { startDate, endDate },
+  });
+  return response.data;
+}
+
+export async function fetchInpCharity(startDate: any, endDate: any) {
+  const response = await api.get("/report/inp-charity", {
+    params: { startDate, endDate },
+  });
+  return response.data;
+}

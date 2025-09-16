@@ -1,9 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "../../components/ui/button"
-import { Label } from "../../components/ui/label"
-import { DatePicker } from "../../components/ui/date-picker"
+import { DateRangeFilter } from "../../components/ui/DateRangeFilter"
 import { ReportTable } from "./ReportTable"
 import Appbar from "../../components/ui/appbar"
 import { fetchReportPr1,fetchReportPayor } from "../../services/reportService"
@@ -69,25 +67,15 @@ export default function Report() {
             {/* Date Range Filters */}
             {reportType !== "bill" && (
                 <>
-              <div className="flex flex-wrap items-end gap-4">
-                  <div className="space-y-2">
-                      <Label htmlFor="start-date">Start date</Label>
-                      <DatePicker date={startDate} onDateChange={setStartDate} placeholder="Select start date" />
-                  </div>
-
-                  <div className="space-y-2">
-                      <Label htmlFor="end-date">End date</Label>
-                      <DatePicker date={endDate} onDateChange={setEndDate} placeholder="Select end date" />
-                  </div>
-
-                  <Button
-                    onClick={handleGenerate}
-                    className="bg-primary h-10 text-primary-foreground "
-                    disabled={loading}
-                  >
-                    {loading ? "Generating..." : "Generate"}
-                  </Button>
-              </div>
+              {/* Date Range Filters */}
+              <DateRangeFilter
+                startDate={startDate}
+                endDate={endDate}
+                onStartDateChange={setStartDate}
+                onEndDateChange={setEndDate}
+                onGenerate={handleGenerate}
+                loading={loading}
+              />
             {error && <div className="text-red-500">{error}</div>}
 
             <div className="flex items-center justify-between mt-4">
