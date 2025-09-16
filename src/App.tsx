@@ -5,9 +5,20 @@ import Report from './pages/reports/Report';
 import PaymentByTransactionTypeReport from './pages/reports/PaymentByTransactionTypeReport';
 import AdjustmentByTransactionTypeReport from './pages/reports/AdjustmentByTransactionTypeReport';
 import InpCharityReport from './pages/reports/InpCharityReport';
+import { SignUp } from './pages/auth/register/SignUp';
+import { ActivateUser } from './components/auth/ActivateUser';
 
 function App() {
   const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const token = params.get("token");
+
+  if (token) {
+    return (
+      <ActivateUser/>
+    );
+  }
+
   const isProtectedRoute = location.pathname.startsWith("/dashboard") || location.pathname.startsWith("/report/");
 
   // Redirect to root if jwtToken not found and on protected route
@@ -20,6 +31,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Login/>} />
+        <Route path="/create-account" element={<SignUp/>} />
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/report/:reportType" element={<Report/>} />
         <Route path="/payment-by-transaction-type" element={<PaymentByTransactionTypeReport />} />
