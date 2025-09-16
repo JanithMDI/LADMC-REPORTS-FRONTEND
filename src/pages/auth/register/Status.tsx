@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 
 export const Status = () => {
-    const [status, setStatus] = useState(true); 
+    const [status] = useState(true); 
     return (
         <>
             {status ? 

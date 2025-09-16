@@ -74,7 +74,7 @@ export default function PaymentByTransactionTypeReport() {
               <tbody>
                 {reportData.map((row: any, idx: number) => (
                   <tr key={idx}>
-                    {Object.values(row).map((val, i) => (
+                    {Object.values(row).map((val:any, i) => (
                       <td key={i} className="border px-2 py-1">{val}</td>
                     ))}
                   </tr>

@@ -26,7 +26,7 @@ export function SignUpForm({ createUser }: SignUpFormProps) {
     setSuccess("");
     setLoading(true);
     try {
-      const res = await createUser(fullname, email);
+       await createUser(fullname, email);
       setSuccess("Account request submitted!");
       setFullname("");
       setEmail("");
