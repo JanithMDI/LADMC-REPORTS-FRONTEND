@@ -1,23 +1,18 @@
 import api from "../lib/axios"
 
-export async function fetchReportPr1(startDate: any, endDate: any) {
-  const response = await api.get("/report/pr1", {
-    params: {
-      startDate,
-      endDate,
-    },
+async function fetchReportWithDates(endpoint: string, startDate: Date, endDate: Date) {
+  const response = await api.get(endpoint, {
+    params: { startDate, endDate },
   })
   return response.data
 }
 
-export async function fetchReportPayor(startDate: any, endDate: any) {
-  const response = await api.get("/report/payor", {
-    params: {
-      startDate,
-      endDate,
-    },
-  })
-  return response.data
+export async function fetchReportPr1(startDate: Date, endDate: Date) {
+  return fetchReportWithDates("/report/pr1", startDate, endDate)
+}
+
+export async function fetchReportPayor(startDate: Date, endDate: Date) {
+  return fetchReportWithDates("/report/payor", startDate, endDate)
 }
 
 export async function exportReportCSV(startDate: Date, endDate: Date) {
@@ -72,23 +67,22 @@ export async function downloadReportPDF(reference?: string) {
 }
 
 
-export async function fetchPaymentByTransactionType(startDate: any, endDate: any) {
-  const response = await api.get("/report/payment-by-transaction-type", {
-    params: { startDate, endDate },
-  });
-  return response.data;
+export async function fetchPaymentByTransactionType(startDate: Date, endDate: Date) {
+  return fetchReportWithDates("/report/payment-by-transaction-type", startDate, endDate)
 }
 
-export async function fetchAdjustmentByTransactionType(startDate: any, endDate: any) {
-  const response = await api.get("/report/adjustment-by-transaction-type", {
-    params: { startDate, endDate },
-  });
-  return response.data;
+export async function fetchAdjustmentByTransactionType(startDate: Date, endDate: Date) {
+  return fetchReportWithDates("/report/adjustment-by-transaction-type", startDate, endDate)
 }
 
-export async function fetchInpCharity(startDate: any, endDate: any) {
-  const response = await api.get("/report/inp-charity", {
-    params: { startDate, endDate },
-  });
-  return response.data;
+export async function fetchInpCharity(startDate: Date, endDate: Date) {
+  return fetchReportWithDates("/report/inp-charity", startDate, endDate)
+}
+
+export async function fetchOpChargesByPrimaryFC(startDate: Date, endDate: Date) {
+  return fetchReportWithDates("/report/op-charges-by-primary-fc", startDate, endDate)
+}
+
+export async function fetchIpChargesByPrimaryFC(startDate: Date, endDate: Date) {
+  return fetchReportWithDates("/report/ip-charges-by-primary-fc", startDate, endDate)
 }

@@ -7,6 +7,8 @@ import AdjustmentByTransactionTypeReport from './pages/reports/AdjustmentByTrans
 import InpCharityReport from './pages/reports/InpCharityReport';
 import { SignUp } from './pages/auth/register/SignUp';
 import { ActivateUser } from './components/auth/ActivateUser';
+import OpChargesByPrimaryFCReport from './pages/reports/OpChargesByPrimaryFCReport';
+import IpChargesByPrimaryFCReport from './pages/reports/IpChargesByPrimaryFCReport';
 
 function App() {
   const location = useLocation();
@@ -37,6 +39,8 @@ function App() {
         <Route path="/payment-by-transaction-type" element={<PaymentByTransactionTypeReport />} />
         <Route path="/adjustment-by-transaction-type" element={<AdjustmentByTransactionTypeReport />} />
         <Route path="/inp-charity" element={<InpCharityReport />} />
+        <Route path="/op-charges-by-primary-fc" element={<OpChargesByPrimaryFCReport />} />
+        <Route path="/ip-charges-by-primary-fc" element={<IpChargesByPrimaryFCReport />} />
       </Routes>
     </>
   )

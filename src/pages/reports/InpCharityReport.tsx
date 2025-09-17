@@ -2,22 +2,7 @@ import { useState } from "react";
 import Appbar from "../../components/ui/appbar";
 import { fetchInpCharity } from "../../services/reportService";
 import { DateRangeFilter } from "../../components/ui/DateRangeFilter";
-
-function formatDate(date?: Date) {
-  if (!date) return "";
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-}
-function formatTime(date?: Date) {
-  if (!date) return "";
-  return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
+import { formatDate, formatTime } from "../../utils/dateUtils";
 
 export default function InpCharityReport() {
   const today = new Date();
@@ -221,3 +206,4 @@ export default function InpCharityReport() {
     </>
   );
 }
+       

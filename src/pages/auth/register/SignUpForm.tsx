@@ -1,18 +1,12 @@
-"use client"
-
-
 import { useState } from "react"
 import { Button } from "../../../components/ui/button"
 import { Input } from "../../../components/ui/input"
 import { Label } from "../../../components/ui/label"
 import { Link } from "react-router-dom"
 import { Status } from './Status'
+import { createUser } from '../../../services/authService'
 
-interface SignUpFormProps {
-  createUser: (username: string, email: string) => Promise<any>;
-}
-
-export function SignUpForm({ createUser }: SignUpFormProps) {
+export function SignUpForm() {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,9 +26,6 @@ export function SignUpForm({ createUser }: SignUpFormProps) {
       setEmail("");
       setShowStatus(true); // Show Status component on success
     } catch (err: any) {
-      console.log('====================================');
-      console.log(err);
-      console.log('====================================');
       setError(err?.response?.data?.message || "Failed to create account");
     } finally {
       setLoading(false);
