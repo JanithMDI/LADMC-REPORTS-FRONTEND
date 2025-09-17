@@ -37,7 +37,7 @@ export default function InpCharityReport() {
     setLoading(true);
     setError("");
     try {
-      const formatDateOnly = (d?: Date) =>
+      const formatDateOnly = (d?: any) =>
         d ? d.toISOString().slice(0, 10) : undefined;
       const data = await fetchInpCharity(
         formatDateOnly(startDate),

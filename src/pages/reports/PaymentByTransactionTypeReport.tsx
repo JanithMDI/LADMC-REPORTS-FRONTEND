@@ -34,7 +34,7 @@ export default function PaymentByTransactionTypeReport() {
     setLoading(true);
     setError("");
     try {
-      const formatDateOnly = (d?: Date) =>
+      const formatDateOnly = (d?: any) =>
         d ? d.toISOString().slice(0, 10) : undefined;
       const data = await fetchPaymentByTransactionType(
         formatDateOnly(startDate),

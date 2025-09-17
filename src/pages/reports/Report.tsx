@@ -42,7 +42,7 @@ export default function Report() {
     setLoading(true)
     setError("")
     try {
-      const formatDateOnly = (d?: Date) =>
+      const formatDateOnly = (d?: any) =>
         d ? d.toISOString().slice(0, 10) : undefined
       let data
       if (reportType === "payor") {
