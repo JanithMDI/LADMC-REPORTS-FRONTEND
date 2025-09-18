@@ -48,18 +48,32 @@ export default function PaymentByTransactionTypeReport() {
     }
   };
 
+  const handleDownloadPDF = () => {
+    // PDF download logic here
+  };
+
   return (
     <>
       <Appbar />
       <section className="min-h-screen bg-background p-4 md:p-6 space-y-6">
-        <DateRangeFilter
-          startDate={startDate}
-          endDate={endDate}
-          onStartDateChange={setStartDate}
-          onEndDateChange={setEndDate}
-          onGenerate={handleGenerate}
-          loading={loading}
-        />
+        <div className="flex flex-wrap items-end gap-4">
+          <DateRangeFilter
+            startDate={startDate}
+            endDate={endDate}
+            onStartDateChange={setStartDate}
+            onEndDateChange={setEndDate}
+            onGenerate={handleGenerate}
+            loading={loading}
+          />
+          <button
+            className="h-10 px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
+            style={{ alignSelf: "flex-end", cursor: reportData && Array.isArray(reportData) && reportData.length > 0 ? "pointer" : "not-allowed" }}
+            onClick={handleDownloadPDF}
+            disabled={!reportData || !Array.isArray(reportData) || reportData.length === 0}
+          >
+            Download PDF
+          </button>
+        </div>
         {error && <div className="text-red-500">{error}</div>}
         <div className="mt-6">
           {reportData && Array.isArray(reportData) && (
@@ -90,4 +104,3 @@ export default function PaymentByTransactionTypeReport() {
     </>
   );
 }
-   

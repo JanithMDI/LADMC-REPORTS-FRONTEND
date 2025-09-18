@@ -3,6 +3,7 @@ import Appbar from "../../components/ui/appbar";
 import { fetchAdjustmentByTransactionType } from "../../services/reportService";
 import { DateRangeFilter } from "../../components/ui/DateRangeFilter";
 import { formatDate, formatTime } from "../../utils/dateUtils";
+import { PrintFooter } from "../../components/report/PrintFooter";
 
 export default function AdjustmentByTransactionTypeReport() {
   const today = new Date();
@@ -63,33 +64,40 @@ export default function AdjustmentByTransactionTypeReport() {
     <>
       <Appbar />
       <section className="min-h-screen bg-background p-4 md:p-6 space-y-6">
-        <DateRangeFilter
-          startDate={startDate}
-          endDate={endDate}
-          onStartDateChange={setStartDate}
-          onEndDateChange={setEndDate}
-          onGenerate={handleGenerate}
-          loading={loading}
-        />
+        <div className="flex flex-wrap items-end gap-4">
+          <DateRangeFilter
+            startDate={startDate}
+            endDate={endDate}
+            onStartDateChange={setStartDate}
+            onEndDateChange={setEndDate}
+            onGenerate={handleGenerate}
+            loading={loading}
+          />
+          <button
+            className="h-10 px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
+            style={{ alignSelf: "flex-end", cursor: reportData.length > 0 ? "pointer" : "not-allowed" }}
+            onClick={handleDownloadPDF}
+            disabled={reportData.length === 0}
+          >
+            Download PDF
+          </button>
+        </div>
         {error && <div className="text-red-500">{error}</div>}
         {reportData.length > 0 && (
           <div>
-            <button
-              className="mb-4 px-4 py-2 bg-primary text-primary-foreground rounded"
-              onClick={handleDownloadPDF}
-            >
-              Download PDF
-            </button>
-            <div id="adjustment-report-html" style={{ background: "#fff", padding: "16px" }}>
+            <div id="adjustment-report-html" style={{ background: "#fff", padding: "16px", fontFamily: "Courier New, Courier, monospace" }}>
+              <PrintFooter />
               <style>{`
                 body{
-                  font-family: Courier New; font-size: 16px; 
+                  font-family: Courier New, Courier, monospace; font-size: 16px; 
                 }
                 table {
-                  width: 100%; border-collapse: collapse; padding: 0; margin: 0;border-spacing: 14px ;border-collapse: separate; vertical-align: top;
+                  width: 100%; border-collapse: collapse; padding: 0; margin: 0; border-spacing: 14px; border-collapse: separate; vertical-align: top;
+                  font-family: Courier New, Courier, monospace;
                 }
                 p {
                   margin: 0; padding: 0;
+                  font-family: Courier New, Courier, monospace;
                 }
                 @media print {
                   body * {
@@ -105,7 +113,22 @@ export default function AdjustmentByTransactionTypeReport() {
                     width: 100vw;
                   }
                   th, td, tr.charge-row { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                  @page { margin: 10px; page-break-inside: avoid;}
+                  @page { 
+                    margin: 10px 10px 40px 10px;
+                    page-break-inside: avoid;
+                    @bottom-left { 
+                      content: "PROGNOSIS HEALTH INFORMATION SYS.";
+                      padding-left: 40px;
+                      border-top: 2px dotted #888;
+                      font-family: Courier New, Courier, monospace;
+                    }
+                    @bottom-right {
+                      content: "Requested By: pedro.merc Page "counter(page)"/"counter(pages);
+                      padding-right: 40px;
+                      border-top: 2px dotted #888;
+                      font-family: Courier New, Courier, monospace;
+                    }
+                  }
                 }
               `}</style>
               {/* Header */}
@@ -121,7 +144,7 @@ export default function AdjustmentByTransactionTypeReport() {
                       <p>L.A. DOWNTOWN MEDICAL CENTER</p>
                     </td>
                     <td style={{ width: "20%", textAlign: "right" }}>
-                      <p>Page:1</p>
+                      {/* <p>Page:1</p> */}
                       <p>adj/o_padjt</p>
                     </td>
                   </tr>
