@@ -17,7 +17,7 @@ export const Categories = () => {
         // { title: "Payment By Transaction Type", img: ImgCoreMeasures,  path:'/payment-by-transaction-type' },
         { title: "Adjustment By Transaction Type", img: ImgStatPoolClassic,  path:'/adjustment-by-transaction-type' },
         { title: "Inp Charity", img: ImgCoreMeasures,  path:'/inp-charity' },
-        // { title: "OP Charges By Primary FC", img: ImgStatPoolClassic, path: "/op-charges-by-primary-fc" },
+        // { title: "OP Charges Bruny Primary FC", img: ImgStatPoolClassic, path: "/op-charges-by-primary-fc" },
         { title: "IP Charges By Primary FC", img: ImgStatPoolPayor, path: "/ip-charges-by-primary-fc" },
         // { title: "Core Measures", img: ImgCoreMeasures,  path:'/report/category4' },
         // { title: "Core Measures", img: ImgCoreMeasures,  path:'/report/category4' },
