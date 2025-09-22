@@ -34,7 +34,7 @@ export default function OpChargesByPrimaryFCReport() {
     setLoading(true);
     setError("");
     try {
-      const formatDateOnly = (d?: any) => d ? d.toISOString().slice(0, 10) : undefined;
+      const formatDateOnly = (d?: Date) => d ? d.toISOString().slice(0, 10) : undefined;
       const data = await fetchOpChargesByPrimaryFC(formatDateOnly(startDate), formatDateOnly(endDate));
       setReportData(Array.isArray(data) ? data : []);
     } catch (err: any) {
@@ -70,7 +70,7 @@ export default function OpChargesByPrimaryFCReport() {
               <tbody>
                 {reportData.map((row: any, idx: number) => (
                   <tr key={idx}>
-                    {Object.values(row).map((val:any, i) => (
+                    {Object.values(row).map((val, i) => (
                       <td key={i} className="border px-2 py-1">{val}</td>
                     ))}
                   </tr>
