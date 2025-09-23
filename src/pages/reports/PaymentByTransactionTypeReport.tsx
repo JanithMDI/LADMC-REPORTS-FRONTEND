@@ -2,6 +2,8 @@ import { useState } from "react";
 import { DateRangeFilter } from "../../components/ui/DateRangeFilter";
 import Appbar from "../../components/ui/appbar";
 import { fetchPaymentByTransactionType } from "../../services/reportService";
+import { PrintFooter } from "../../components/report/PrintFooter";
+import { formatDate, formatTime } from "../../utils/dateUtils";
 
 export default function PaymentByTransactionTypeReport() {
   const today = new Date();
@@ -12,7 +14,7 @@ export default function PaymentByTransactionTypeReport() {
 
   const [startDate, setStartDate] = useState<Date | undefined>(dayBeforeYesterday);
   const [endDate, setEndDate] = useState<Date | undefined>(yesterday);
-  const [reportData, setReportData] = useState<any>(null);
+  const [reportData, setReportData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -40,7 +42,7 @@ export default function PaymentByTransactionTypeReport() {
         formatDateOnly(startDate),
         formatDateOnly(endDate)
       );
-      setReportData(data);
+      setReportData(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to fetch report");
     } finally {
@@ -49,8 +51,51 @@ export default function PaymentByTransactionTypeReport() {
   };
 
   const handleDownloadPDF = () => {
-    // PDF download logic here
+    const reportHtml = document.getElementById("payment-report-html");
+    if (!reportHtml) return;
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Payments By Transaction Type/ Fac</title>
+          <style>
+            body{ font-family: Courier New, Courier, monospace; font-size: 16px; }
+            table { width: 100%; border-collapse: collapse; padding: 0; margin: 0; border-spacing: 14px; border-collapse: separate; vertical-align: top; }
+            p { margin: 0; padding: 0; }
+            @media print {
+              th, td, tr.charge-row { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+              @page { margin: 10px; page-break-inside: avoid; }
+              @bottom-left { 
+                content: "PROGNOSIS HEALTH INFORMATION SYS.";
+                padding-left: 40px;
+                border-top: 2px dotted #888;
+                font-family: Courier New, Courier, monospace;
+              }
+              @bottom-right {
+                content: "Requested By: pedro.merc Page "counter(page)"/"counter(pages);
+                padding-right: 40px;
+                border-top: 2px dotted #888;
+                font-family: Courier New, Courier, monospace;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          ${reportHtml.innerHTML}
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
   };
+
+  // Calculate totals
+  const totalCount = reportData.reduce((sum, row) => sum + Number(row.count || 0), 0);
+  const totalAmount = reportData.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+
+  const now = new Date();
 
   return (
     <>
@@ -67,37 +112,109 @@ export default function PaymentByTransactionTypeReport() {
           />
           <button
             className="h-10 px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
-            style={{ alignSelf: "flex-end", cursor: reportData && Array.isArray(reportData) && reportData.length > 0 ? "pointer" : "not-allowed" }}
+            style={{ alignSelf: "flex-end", cursor: reportData.length > 0 ? "pointer" : "not-allowed" }}
             onClick={handleDownloadPDF}
-            disabled={!reportData || !Array.isArray(reportData) || reportData.length === 0}
+            disabled={reportData.length === 0}
           >
             Download PDF
           </button>
         </div>
         {error && <div className="text-red-500">{error}</div>}
         <div className="mt-6">
-          {reportData && Array.isArray(reportData) && (
-            <table className="min-w-full border">
-              <thead>
-                <tr>
-                  {Object.keys(reportData[0] || {}).map((key) => (
-                    <th key={key} className="border px-2 py-1 text-left">{key}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {reportData.map((row: any, idx: number) => (
-                  <tr key={idx}>
-                    {Object.values(row).map((val:any, i) => (
-                      <td key={i} className="border px-2 py-1">{val}</td>
-                    ))}
+          {reportData.length > 0 && (
+            <div
+              id="payment-report-html"
+              style={{
+                background: "#fff",
+                padding: "16px",
+                fontFamily: "Courier New, Courier, monospace",
+                position: "relative",
+                minHeight: "1100px"
+              }}
+            >
+              <PrintFooter marginBottom="80px" />
+              <style>{`
+                body{
+                  font-family: Courier New; font-size: 16px; 
+                }
+                table {
+                  width: 100%; border-collapse: collapse; padding: 0; margin: 0; border-spacing: 14px; border-collapse: separate; vertical-align: top;
+                }
+                p {
+                  margin: 0; padding: 0;
+                }
+                @media print {
+                  th, td, tr.charge-row { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                  @page { margin: 10px; page-break-inside: avoid;}
+                }
+              `}</style>
+              {/* Header */}
+              <table style={{ borderSpacing: 0 }}>
+                <tbody>
+                  <tr>
+                    <td style={{ width: "20%" }}>
+                      <p>Date: {formatDate(now)}</p>
+                      <p>Time: {formatTime(now)}</p>
+                    </td>
+                    <td style={{ width: "40%", textAlign: "center" }}>
+                      <p>Payments By Transaction Type/ Fac</p>
+                      <p>L.A. DOWNTOWN MEDICAL CENTER</p>
+                    </td>
+                    <td style={{ width: "20%", textAlign: "right" }}>
+                      {/* <p>Page:1</p> */}
+                      <p>pay/o_ppaytf</p>
+                    </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                  <tr>
+                    <td colSpan={3} style={{ textAlign: "center", padding: 0 }}>
+                      <p>
+                        Processing Dates From: {formatDate(startDate)} Through {formatDate(endDate)}
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {/* Divider */}
+              <table style={{ borderSpacing: 0 }}>
+                <tbody>
+                  <tr>
+                    <td colSpan={3} style={{ borderBottom: "2px dashed #888" }}>&nbsp;</td>
+                  </tr>
+                </tbody>
+              </table>
+              {/* Data */}
+              <table>
+                <tbody>
+                  {reportData.map((row: any, idx: number) => (
+                    <tr key={idx}>
+                      <td>
+                        HOS Transaction Type: {row.type} - {row.description}
+                      </td>
+                      <td align="right">{row.count}</td>
+                      <td align="right">{Number(row.amount).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td colSpan={3}>&nbsp;</td>
+                  </tr>
+                  {/* Total */}
+                  <tr>
+                    <td style={{ verticalAlign: "top" }}>
+                      Total Payments By Processing Date For All Facilities
+                    </td>
+                    <td align="right" style={{ borderTop: "2px dashed #888" }}>
+                      {totalCount.toLocaleString("en-US")}
+                    </td>
+                    <td align="right" style={{ borderTop: "2px dashed #888" }}>
+                      {totalAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           )}
-          {!loading && reportData && !Array.isArray(reportData) && (
-            <pre>{JSON.stringify(reportData, null, 2)}</pre>
+          {!loading && reportData.length === 0 && (
+            <div className="text-muted-foreground">No data to display.</div>
           )}
         </div>
       </section>
