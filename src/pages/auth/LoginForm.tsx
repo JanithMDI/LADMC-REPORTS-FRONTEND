@@ -112,7 +112,7 @@ export function LoginForm() {
             {loggingIn ? "Signing In..." : "Sign In"}
           </Button>
 
-          <Link to={'/create-account'} className="block text-base text-foreground text-center opacity-80 hover:opacity-100 underline underline-offset-2">Create account</Link>
+          {/* <Link to={'/create-account'} className="block text-base text-foreground text-center opacity-80 hover:opacity-100 underline underline-offset-2">Create account</Link> */}
         </form>
     </>
   )
