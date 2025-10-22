@@ -139,7 +139,7 @@ export default function OpChargesByPrimaryFCReport() {
                 minHeight: "1100px" // Increase minHeight to move footer up
               }}
             >
-              <PrintFooter marginBottom="80px" />
+              <PrintFooter marginBottom="10px" />
               <style>{`
                 body{
                   font-family: Courier New; font-size: 16px; 

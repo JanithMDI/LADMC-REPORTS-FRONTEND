@@ -14,11 +14,11 @@ export const Categories = () => {
         { title: "Itemized Bill", img: ImgItemizedBill, path:'/report/bill' },
         { title: "Stat Pool-Classic", img: ImgStatPoolClassic, path:'/report/report' },
         { title: "Stat Pool-Payor", img: ImgStatPoolPayor,  path:'/report/payor' },
-        { title: "Payment By Transaction Type", img: ImgCoreMeasures,  path:'/payment-by-transaction-type' },
-        { title: "Adjustment By Transaction Type", img: ImgStatPoolClassic,  path:'/adjustment-by-transaction-type' },
-        { title: "Inp Charity", img: ImgCoreMeasures,  path:'/inp-charity' },
-        { title: "OP Charges Bruny Primary FC", img: ImgStatPoolClassic, path: "/op-charges-by-primary-fc" },
-        { title: "IP Charges By Primary FC", img: ImgStatPoolPayor, path: "/ip-charges-by-primary-fc" },
+        // { title: "Payment By Transaction Type", img: ImgCoreMeasures,  path:'/payment-by-transaction-type' },
+        // { title: "Adjustment By Transaction Type", img: ImgStatPoolClassic,  path:'/adjustment-by-transaction-type' },
+        // { title: "Inp Charity", img: ImgCoreMeasures,  path:'/inp-charity' },
+        // { title: "OP Charges Bruny Primary FC", img: ImgStatPoolClassic, path: "/op-charges-by-primary-fc" },
+        // { title: "IP Charges By Primary FC", img: ImgStatPoolPayor, path: "/ip-charges-by-primary-fc" },
     ]
   return (
     <div className="w-[60dvw] mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
