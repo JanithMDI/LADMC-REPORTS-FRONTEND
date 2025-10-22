@@ -9,7 +9,7 @@ import { Label } from "../../components/ui/label"
 import { Alert, AlertDescription } from "../../components/ui/alert"
 import { Eye, EyeOff, AlertCircle } from "lucide-react"
 import { login } from "../../services/authService"
-import {  useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export function LoginForm() {
   const [formData, setFormData] = useState({
@@ -112,7 +112,7 @@ export function LoginForm() {
             {loggingIn ? "Signing In..." : "Sign In"}
           </Button>
 
-          {/* <Link to={'/create-account'} className="block text-base text-foreground text-center opacity-80 hover:opacity-100 underline underline-offset-2">Create account</Link> */}
+          <Link to={'/create-account'} className="block text-base text-foreground text-center opacity-80 hover:opacity-100 underline underline-offset-2">Create account</Link>
         </form>
     </>
   )
