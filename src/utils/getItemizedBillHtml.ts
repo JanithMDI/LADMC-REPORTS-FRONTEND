@@ -223,6 +223,23 @@ function getItemizedBillHtml(data: any[]): string {
         }
     </table>
 
+        <table style="border: 1px solid black;">
+        <tr style="background-color: #B7B7B7; border: 1px solid black; border-top: 0;">
+            <td style="width: 20%; font-weight: bold;">Room</td>
+            <td style="width: 20%; border-left: 1px solid black; font-weight: bold;">Bed</td>
+            <td style="width: 20%; border-left: 1px solid black; font-weight: bold;">Total Payment</td>
+            <td style="width: 20%; border-left: 1px solid black; font-weight: bold;">Adjustment Total</td>
+            <td style="width: 20%; border-left: 1px solid black; font-weight: bold;">Balance Total</td>
+        </tr>
+        <tr>
+            <td >${patient?.room || "N/A"}</td>
+            <td >${patient?.bed || "N/A"}</td>
+            <td >${formatAmount(patient?.payment_total || 0)}</td>
+            <td >${formatAmount(patient?.adjustment_total || 0)}</td>
+            <td >${formatAmount(patient?.balance_total || 0)}</td>
+        </tr>
+    </table>
+
     <table>
         <tr style="background-color: #B7B7B7; border: 1px solid black; border-top: 0;">
             <td style="border-left: 1px solid black; font-weight: bold;">Date</td>
