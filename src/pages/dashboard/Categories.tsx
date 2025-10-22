@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import ImgItemizedBill from '../../assets/bg-1.png'
 import ImgStatPoolClassic from '../../assets/bg-2.png'
 import ImgStatPoolPayor from '../../assets/bg-3.png'
-import ImgCoreMeasures from '../../assets/bg-4.png'
+// import ImgCoreMeasures from '../../assets/bg-4.png'
 
 interface Category {
     title: string,
