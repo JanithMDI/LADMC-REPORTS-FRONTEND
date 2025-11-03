@@ -11,9 +11,10 @@ interface DomainConfig {
 
 export const getDomainConfig = (): DomainConfig => {
   const hostname = window.location.hostname;
+  console.log(hostname);
   
   // Define domain configurations directly
-  if (hostname.includes('ladmc.com') || hostname.includes('ladmc')) {
+  if (hostname.includes('ladmc-reports') || hostname.includes('ladmc')) {
     return {
       logo: ladmc,
       title: 'LADMC Reports',
@@ -24,7 +25,7 @@ export const getDomainConfig = (): DomainConfig => {
     };
   }
   
-  if (hostname.includes('wcmc.com') || hostname.includes('wcmc')) {
+  if (hostname.includes('wcmc-reports') || hostname.includes('wcmc')) {
     return {
       logo: wcmc,
       title: 'WCMC Reports',
