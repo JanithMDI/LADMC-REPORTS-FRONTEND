@@ -1,6 +1,7 @@
 import { LogOut } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { getDomainConfig } from '../../utils/domainConfig'
+// import Logo from '../../assets/4js-logo.svg'
 
 const Appbar = () => {
   const config = getDomainConfig();
@@ -9,6 +10,7 @@ const Appbar = () => {
     <div className='px-4 md:px-6 w-full h-16 flex justify-between items-center bg-secondary border-b border-border'>
       <Link to="/dashboard">
         <img src={config.logo} alt="LADMC-4JS-LOGO" className='h-15' />
+        {/* <img src={Logo} alt="LADMC-4JS-LOGO" className='h-15' /> */}
       </Link>
       <button
         type="button"

@@ -247,6 +247,7 @@ function getItemizedBillHtml(data: any[]): string {
         </tr>
 
 
+
         ${chargesRows}
         <tr style="font-family: Courier New; font-size: 16px;">
             <td colspan="5">Total Charges</td>
