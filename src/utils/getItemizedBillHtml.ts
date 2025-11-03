@@ -246,19 +246,6 @@ function getItemizedBillHtml(data: any[]): string {
             <td style="border-left: 1px solid black; font-weight: bold; text-align: center;">Amount</td>
         </tr>
 
-        <tr style="font-family: Courier New; font-size: 16px;">
-          <td style="width: 13%; padding-bottom: 0;">${formatDateShort(patient?.room_chg_date)}</td>
-          <td style="width: 10%; padding-bottom: 0;">${patient?.room_type || ""}</td>
-          <td style="width: 40%; padding-bottom: 0;">${ ""}</td>
-          <td style="width: 7%; padding-bottom: 0;">${patient?.room_days || ""}</td>
-          <td style="width: 10%; padding-bottom: 0; text-align: right;">${patient?.room_rate || ""}</td>
-          <td style="width: 10%; padding-bottom: 0; text-align: right;">${patient.room_chg != null ? formatAmount(parseFloat(patient.room_chg)) : ""}</td>
-        </tr>
-
-        <tr style="font-family: Courier New; font-size: 16px;">
-            <td colspan="5">Room and Care Charge Totals </td>
-            <td  style="border-top: 1px solid black; text-align: right;">${formatAmount(patient.room_chg)}</td>
-        </tr>
 
         ${chargesRows}
         <tr style="font-family: Courier New; font-size: 16px;">
