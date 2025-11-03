@@ -1,3 +1,8 @@
+import { getDomainConfig } from './domainConfig'
+
+  const config = getDomainConfig();
+
+
 function getItemizedBillHtml(data: any[]): string {
   // Use first record for patient info
   const patient = data && data.length > 0 ? data[0] : {};
@@ -19,6 +24,16 @@ function getItemizedBillHtml(data: any[]): string {
     const dd = String(d.getDate()).padStart(2, "0");
     const yyyy = d.getFullYear();
     return `${mm}-${dd}-${yyyy}`;
+  };
+
+  // Helper for date formatting: MM-DD-YY
+  const formatDateShort = (dateStr?: string) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const yy = String(d.getFullYear()).slice(-2);
+    return `${mm}-${dd}-${yy}`;
   };
 
   // Group by Department
@@ -85,13 +100,11 @@ function getItemizedBillHtml(data: any[]): string {
     <table>
         <tr>
             <td style="width: 40%;">
-                <img src="https://ladowntownmc.com/wp-content/uploads/2019/06/copy-of-logo.png" style="width: 280px;" alt="ladmc-logo">
+                <img src="${config.reportLogo}" style="width: 280px;" alt="ladmc-logo">
             </td>
             <td style="width: 20%;">
                 <p style="font-size: 14px;"> 
-                    1711 West Temple Street <br>
-                    Los Angeles CA 90026 5421 <br>
-                    213-989-6100 <br>
+                  ${config.address}
                 </p>
             </td>
             <td style="width: 20%; vertical-align: bottom; ">
@@ -129,8 +142,8 @@ function getItemizedBillHtml(data: any[]): string {
             <td style="width: 20%; padding: 0;">
                 <table>
                     <tr>
-                        <td style="width: 50%; border: 1px solid black; border-top: 0;">OL</td>
-                        <td style="width: 50%; border: 1px solid black; border-top: 0;">MC</td>
+                        <td style="width: 50%; border: 1px solid black; border-top: 0;">${patient?.pat_status || "N/A"}</td>
+                        <td style="width: 50%; border: 1px solid black; border-top: 0;">${patient?.fin_class || "N/A"}</td>
                     </tr>
                 </table>
             </td>
@@ -223,23 +236,6 @@ function getItemizedBillHtml(data: any[]): string {
         }
     </table>
 
-        <table style="border: 1px solid black;">
-        <tr style="background-color: #B7B7B7; border: 1px solid black; border-top: 0;">
-            <td style="width: 20%; font-weight: bold;">Room</td>
-            <td style="width: 20%; border-left: 1px solid black; font-weight: bold;">Bed</td>
-            <td style="width: 20%; border-left: 1px solid black; font-weight: bold;">Total Payment</td>
-            <td style="width: 20%; border-left: 1px solid black; font-weight: bold;">Adjustment Total</td>
-            <td style="width: 20%; border-left: 1px solid black; font-weight: bold;">Balance Total</td>
-        </tr>
-        <tr>
-            <td >${patient?.room || "N/A"}</td>
-            <td >${patient?.bed || "N/A"}</td>
-            <td >${formatAmount(patient?.payment_total || 0)}</td>
-            <td >${formatAmount(patient?.adjustment_total || 0)}</td>
-            <td >${formatAmount(patient?.balance_total || 0)}</td>
-        </tr>
-    </table>
-
     <table>
         <tr style="background-color: #B7B7B7; border: 1px solid black; border-top: 0;">
             <td style="border-left: 1px solid black; font-weight: bold;">Date</td>
@@ -249,6 +245,21 @@ function getItemizedBillHtml(data: any[]): string {
             <td style="border-left: 1px solid black; font-weight: bold;">Rate</td>
             <td style="border-left: 1px solid black; font-weight: bold; text-align: center;">Amount</td>
         </tr>
+
+        <tr style="font-family: Courier New; font-size: 16px;">
+          <td style="width: 13%; padding-bottom: 0;">${formatDateShort(patient?.room_chg_date)}</td>
+          <td style="width: 10%; padding-bottom: 0;">${patient?.room_type || ""}</td>
+          <td style="width: 40%; padding-bottom: 0;">${ ""}</td>
+          <td style="width: 7%; padding-bottom: 0;">${patient?.room_days || ""}</td>
+          <td style="width: 10%; padding-bottom: 0; text-align: right;">${patient?.room_rate || ""}</td>
+          <td style="width: 10%; padding-bottom: 0; text-align: right;">${patient.room_chg != null ? formatAmount(parseFloat(patient.room_chg)) : ""}</td>
+        </tr>
+
+        <tr style="font-family: Courier New; font-size: 16px;">
+            <td colspan="5">Room and Care Charge Totals </td>
+            <td  style="border-top: 1px solid black; text-align: right;">${formatAmount(patient.room_chg)}</td>
+        </tr>
+
         ${chargesRows}
         <tr style="font-family: Courier New; font-size: 16px;">
             <td colspan="5">Total Charges</td>

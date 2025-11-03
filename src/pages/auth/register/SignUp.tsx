@@ -1,11 +1,13 @@
-import Logo from '../../../assets/4js-logo.svg'
 import { SignUpForm } from './SignUpForm'
-
+import { getDomainConfig } from '../../../utils/domainConfig'
+    
 export const SignUp = () => {
+    const config = getDomainConfig();
+
     return (
         <>
             <div className='p-6 w-full flex  items-center'>
-                <img src={Logo} alt="LADMC-4JS-LOGO" className='h-15'/>
+                <img src={config.logo} alt="LADMC-4JS-LOGO" className='h-15'/>
             </div>
             <div className='p-6 md:p-0 w-full md:w-[356px] mt-10 mx-auto flex flex-col gap-8'>
                 <SignUpForm />
