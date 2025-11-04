@@ -27,9 +27,9 @@ function getItemizedBillHtml(data: any[]): string {
     });
   };
    const adjustmentDetails = parseAdjustmentDetail(patient.adjustment_detail);
-console.log('====================================');
-console.log(adjustmentDetails);
-console.log('====================================');
+// console.log('====================================');
+// console.log(adjustmentDetails);
+// console.log('====================================');
   const totalAmount = chargesTotal + roomCharge + adjustment_total;
 
 
