@@ -1,6 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
+  // baseURL: "https://ladmc-reports.elifeamerica.com/api", // Updated base URL
   baseURL: "/api", // Updated base URL
 })
 

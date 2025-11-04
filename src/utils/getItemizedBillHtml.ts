@@ -6,11 +6,32 @@ import { getDomainConfig } from './domainConfig'
 function getItemizedBillHtml(data: any[]): string {
   // Use first record for patient info
   const patient = data && data.length > 0 ? data[0] : {};
-  const totalAmount = data ? data.reduce((sum, row) => sum + (parseFloat(row.amount) || 0), 0) : 0;
-
+  const chargesTotal = data ? data.reduce((sum, row) => sum + (parseFloat(row.amount) || 0), 0) : 0;
+  const roomCharge = parseFloat(patient.room_chg) || 0;
+  const adjustment_total = parseFloat(patient.adjustment_total) || 0;
+  
   // Parse insurance fields
   const [primaryInsName = "", plan = "", primaryPolicyNo = ""] = (patient.primary_insurance_data || "").split(":");
   const [secondaryInsName = "", secondaryPlan = "", secondaryPolicyNo = ""] = (patient.secondary_insurance_data || "").split(":");
+
+  // Parse adjustment details
+  const parseAdjustmentDetail = (adjustmentStr?: string) => {
+    if (!adjustmentStr) return [];
+    return adjustmentStr.split(",").map(item => {
+      const [date, description, amount] = item.split(":");
+      return {
+        date: date?.trim() || "",
+        description: description?.trim() || "",
+        amount: amount?.trim() || ""
+      };
+    });
+  };
+   const adjustmentDetails = parseAdjustmentDetail(patient.adjustment_detail);
+console.log('====================================');
+console.log(adjustmentDetails);
+console.log('====================================');
+  const totalAmount = chargesTotal + roomCharge + adjustment_total;
+
 
   // Format amount with thousand separator
   const formatAmount = (num: number) =>
@@ -27,19 +48,23 @@ function getItemizedBillHtml(data: any[]): string {
   };
 
   // Helper for date formatting: MM-DD-YY
-//   const formatDateShort = (dateStr?: string) => {
-//     if (!dateStr) return "";
-//     const d = new Date(dateStr);
-//     const mm = String(d.getMonth() + 1).padStart(2, "0");
-//     const dd = String(d.getDate()).padStart(2, "0");
-//     const yy = String(d.getFullYear()).slice(-2);
-//     return `${mm}-${dd}-${yy}`;
-//   };
+  const formatDateShort = (dateStr?: string) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const yy = String(d.getFullYear()).slice(-2);
+    return `${mm}-${dd}-${yy}`;
+  };
+
+
+
 
   // Group by Department
   const grouped: Record<string, any[]> = {};
   (data || []).forEach(row => {
     if (!grouped[row.Department]) grouped[row.Department] = [];
+    // Add parsed adjustment details to each row
     grouped[row.Department].push(row);
   });
 
@@ -235,7 +260,6 @@ function getItemizedBillHtml(data: any[]): string {
             : ""
         }
     </table>
-
     <table>
         <tr style="background-color: #B7B7B7; border: 1px solid black; border-top: 0;">
             <td style="border-left: 1px solid black; font-weight: bold;">Date</td>
@@ -245,10 +269,41 @@ function getItemizedBillHtml(data: any[]): string {
             <td style="border-left: 1px solid black; font-weight: bold;">Rate</td>
             <td style="border-left: 1px solid black; font-weight: bold; text-align: center;">Amount</td>
         </tr>
+        
+    ${ patient?.room_days && patient?.room_chg != 0 ? `
+            <tr style="font-family: Courier New; font-size: 16px;">
+            <td style="width: 13%; padding-bottom: 0;">${formatDateShort(patient?.room_chg_date)}</td>
+            <td style="width: 10%; padding-bottom: 0;">${ ""}</td>
+            <td style="width: 40%; padding-bottom: 0;">${patient?.room_type || ""}</td>
+            <td style="width: 7%; padding-bottom: 0;">${patient?.room_days || ""}</td>
+            <td style="width: 10%; padding-bottom: 0; text-align: right;">${patient?.room_rate || ""}</td>
+            <td style="width: 10%; padding-bottom: 0; text-align: right;">${patient.room_chg != null ? formatAmount(parseFloat(patient.room_chg)) : ""}</td>
+            </tr>
 
-
-
+            <tr style="font-family: Courier New; font-size: 16px;">
+                <td colspan="5">Room and Care Charge Totals </td>
+                <td  style="border-top: 1px solid black; text-align: right;">${formatAmount(parseFloat(patient.room_chg))}</td>
+            </tr>
+        ` : "" }
+       
         ${chargesRows}
+
+        ${adjustmentDetails.length > 0 ? adjustmentDetails.map(adj => `
+            <tr style="font-family: Courier New; font-size: 16px;">
+              <td style="width: 13%; padding-bottom: 0;">${formatDateShort(adj.date)}</td>
+              <td style="width: 10%; padding-bottom: 0;">${""}</td>
+              <td style="width: 40%; padding-bottom: 0;">${adj.description}</td>
+              <td style="width: 7%; padding-bottom: 0;">${""}</td>
+              <td style="width: 10%; padding-bottom: 0; text-align: right;">${""}</td>
+              <td style="width: 10%; padding-bottom: 0; text-align: right;">${adj.amount != null ? formatAmount(parseFloat(adj.amount)) : ""}</td>
+            </tr>
+        `).join("")+
+        `<tr style="font-family: Courier New; font-size: 16px;">
+            <td></td>
+            <td colspan="4" style="text-align: center; ">Adjustments TOTALS</td>
+            <td  style="border-top: 1px solid black; text-align: right;">${formatAmount(parseFloat(patient?.adjustment_total) || 0)}</td>
+        </tr>` : "" }
+
         <tr style="font-family: Courier New; font-size: 16px;">
             <td colspan="5">Total Charges</td>
             <td style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(totalAmount)}</td>
