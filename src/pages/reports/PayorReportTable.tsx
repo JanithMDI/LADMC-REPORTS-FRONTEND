@@ -56,6 +56,11 @@ export default function PayorReportTable({ data, loading, startDate, endDate }: 
   const isArray = Array.isArray(data?.data)
   const totalPages = isArray && data?.data && data.data.length > 0 ? Math.ceil(data.data.length / itemsPerPage) : 1
 
+  // Reset to page 1 when items per page changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [itemsPerPage])
+
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined
     if (exporting) {
@@ -185,7 +190,7 @@ export default function PayorReportTable({ data, loading, startDate, endDate }: 
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <div className="text-sm text-muted-foreground">
-          Page {currentPage} of {totalPages}
+          Page {currentPage} of {totalPages} ({data?.data?.length || 0} total items)
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -197,22 +202,123 @@ export default function PayorReportTable({ data, loading, startDate, endDate }: 
             <ChevronLeft className="h-4 w-4" />
             Previous
           </Button>
-          <div className="flex items-center gap-1 ">
-            {[1, 2, 3, 4].map((page) => (
-              <Button
-                key={page}
-                variant={currentPage === page ? "default" : "outline"}
-                size="sm"
-                onClick={() => setCurrentPage(page)}
-                className="w-8 h-8 p-0"
-              >
-                {page}
-              </Button>
-            ))}
-            <span className="px-2 text-sm text-muted-foreground">...</span>
-            <Button variant="outline" size="sm" onClick={() => setCurrentPage(totalPages)} className="w-8 h-8 p-0">
-              {totalPages}
-            </Button>
+          <div className="flex items-center gap-1">
+            {(() => {
+              const pages = [];
+              const showEllipsis = totalPages > 5;
+              
+              if (!showEllipsis) {
+                // Show all pages if total is 5 or less
+                for (let i = 1; i <= totalPages; i++) {
+                  pages.push(
+                    <Button
+                      key={i}
+                      variant={currentPage === i ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentPage(i)}
+                      className="w-8 h-8 p-0"
+                    >
+                      {i}
+                    </Button>
+                  );
+                }
+              } else {
+                // Show abbreviated pagination
+                if (currentPage <= 3) {
+                  for (let i = 1; i <= 4; i++) {
+                    pages.push(
+                      <Button
+                        key={i}
+                        variant={currentPage === i ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(i)}
+                        className="w-8 h-8 p-0"
+                      >
+                        {i}
+                      </Button>
+                    );
+                  }
+                  pages.push(<span key="ellipsis" className="px-2 text-sm text-muted-foreground">...</span>);
+                  pages.push(
+                    <Button
+                      key={totalPages}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(totalPages)}
+                      className="w-8 h-8 p-0"
+                    >
+                      {totalPages}
+                    </Button>
+                  );
+                } else if (currentPage >= totalPages - 2) {
+                  pages.push(
+                    <Button
+                      key={1}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(1)}
+                      className="w-8 h-8 p-0"
+                    >
+                      1
+                    </Button>
+                  );
+                  pages.push(<span key="ellipsis" className="px-2 text-sm text-muted-foreground">...</span>);
+                  for (let i = totalPages - 3; i <= totalPages; i++) {
+                    pages.push(
+                      <Button
+                        key={i}
+                        variant={currentPage === i ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(i)}
+                        className="w-8 h-8 p-0"
+                      >
+                        {i}
+                      </Button>
+                    );
+                  }
+                } else {
+                  pages.push(
+                    <Button
+                      key={1}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(1)}
+                      className="w-8 h-8 p-0"
+                    >
+                      1
+                    </Button>
+                  );
+                  pages.push(<span key="ellipsis1" className="px-2 text-sm text-muted-foreground">...</span>);
+                  for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+                    pages.push(
+                      <Button
+                        key={i}
+                        variant={currentPage === i ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(i)}
+                        className="w-8 h-8 p-0"
+                      >
+                        {i}
+                      </Button>
+                    );
+                  }
+                  pages.push(<span key="ellipsis2" className="px-2 text-sm text-muted-foreground">...</span>);
+                  pages.push(
+                    <Button
+                      key={totalPages}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(totalPages)}
+                      className="w-8 h-8 p-0"
+                    >
+                      {totalPages}
+                    </Button>
+                  );
+                }
+              }
+              
+              return pages;
+            })()}
           </div>
           <Button
             variant="outline"
