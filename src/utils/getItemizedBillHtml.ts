@@ -8,7 +8,7 @@ function getItemizedBillHtml(data: any[]): string {
   const patient = data && data.length > 0 ? data[0] : {};
   const chargesTotal = data ? data.reduce((sum, row) => sum + (parseFloat(row.amount) || 0), 0) : 0;
   const roomCharge = parseFloat(patient.room_chg) || 0;
-//   const adjustment_total = parseFloat(patient.adjustment_total) || 0;
+  const adjustment_total = parseFloat(patient.adjustment_total) || 0;
   
   // Parse insurance fields
   const [primaryInsName = "", plan = "", primaryPolicyNo = ""] = (patient.primary_insurance_data || "").split(":");
@@ -31,8 +31,8 @@ function getItemizedBillHtml(data: any[]): string {
 // console.log(adjustmentDetails);
 // console.log('====================================');
   const totalAmount = chargesTotal + roomCharge ;
-  const totalDue = patient?.payment_total || 0;
-//   const totalDue = totalAmount + (adjustment_total || 0);
+//   const totalDue = patient?.balance_total || 0;
+  const totalDue = totalAmount + (adjustment_total);
 
 
   // Format amount with thousand separator
