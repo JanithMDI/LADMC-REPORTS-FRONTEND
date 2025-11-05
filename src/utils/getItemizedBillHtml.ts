@@ -8,7 +8,7 @@ function getItemizedBillHtml(data: any[]): string {
   const patient = data && data.length > 0 ? data[0] : {};
   const chargesTotal = data ? data.reduce((sum, row) => sum + (parseFloat(row.amount) || 0), 0) : 0;
   const roomCharge = parseFloat(patient.room_chg) || 0;
-  const adjustment_total = parseFloat(patient.adjustment_total) || 0;
+//   const adjustment_total = parseFloat(patient.adjustment_total) || 0;
   
   // Parse insurance fields
   const [primaryInsName = "", plan = "", primaryPolicyNo = ""] = (patient.primary_insurance_data || "").split(":");
@@ -30,7 +30,9 @@ function getItemizedBillHtml(data: any[]): string {
 // console.log('====================================');
 // console.log(adjustmentDetails);
 // console.log('====================================');
-  const totalAmount = chargesTotal + roomCharge + adjustment_total;
+  const totalAmount = chargesTotal + roomCharge ;
+  const totalDue = patient?.payment_total || 0;
+//   const totalDue = totalAmount + (adjustment_total || 0);
 
 
   // Format amount with thousand separator
@@ -96,7 +98,7 @@ function getItemizedBillHtml(data: any[]): string {
     }).join("");
 
     chargesRows += `<tr style="font-family: Courier New; font-size: 16px;">
-            <td></td>
+            <td> ${rows[0]?.location || ""}</td>
             <td colspan="4" style="text-align: center; ">DEPT ${dept} TOTALS</td>
             <td  style="border-top: 1px solid black; text-align: right;">${formatAmount(deptTotal)}</td>
         </tr>`;
@@ -210,7 +212,7 @@ function getItemizedBillHtml(data: any[]): string {
                         <td>Secondary Contact Number</td>
                     </tr>
                     <tr>
-                         <td>${patient.emerg_con_phone_1 || ""}</td>
+                         <td>${patient.nextkin_phone || ""}</td>
                     </tr>
                 </table>
             </td>
@@ -288,6 +290,11 @@ function getItemizedBillHtml(data: any[]): string {
        
         ${chargesRows}
 
+        <tr style="font-family: Courier New; font-size: 16px;">
+            <td colspan="5">Total Charges</td>
+            <td style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(totalAmount)}</td>
+        </tr>
+
         ${adjustmentDetails.length > 0 ? adjustmentDetails.map(adj => `
             <tr style="font-family: Courier New; font-size: 16px;">
               <td style="width: 13%; padding-bottom: 0;">${formatDateShort(adj.date)}</td>
@@ -299,18 +306,15 @@ function getItemizedBillHtml(data: any[]): string {
             </tr>
         `).join("")+
         `<tr style="font-family: Courier New; font-size: 16px;">
-            <td></td>
-            <td colspan="4" style="text-align: center; ">Adjustments TOTALS</td>
+            <td>Total Adjustments:</td>
+            <td colspan="4" style="text-align: center; "></td>
             <td  style="border-top: 1px solid black; text-align: right;">${formatAmount(parseFloat(patient?.adjustment_total) || 0)}</td>
         </tr>` : "" }
 
-        <tr style="font-family: Courier New; font-size: 16px;">
-            <td colspan="5">Total Charges</td>
-            <td style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(totalAmount)}</td>
-        </tr>
+
         <tr style="font-family: Courier New; font-size: 16px;">
             <td colspan="4" style="text-align: center;">Amount Due:</td>
-            <td colspan="2" style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(totalAmount)}</td>
+            <td colspan="2" style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(parseFloat(totalDue))}</td>
         </tr>
     </table>
 </body>
