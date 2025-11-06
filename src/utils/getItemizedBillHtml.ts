@@ -325,7 +325,7 @@ function getItemizedBillHtml(data: any[]): string {
         </tr>
 
           <tr style="font-family: Courier New; font-size: 16px;">
-            <td colspan="4">Balance:</td>
+            <td colspan="4">Amount Due:</td>
             <td colspan="2" style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(parseFloat(amount_due))}</td>
         </tr>
 
