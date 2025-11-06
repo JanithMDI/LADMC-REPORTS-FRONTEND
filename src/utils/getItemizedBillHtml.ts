@@ -6,9 +6,9 @@ import { getDomainConfig } from './domainConfig'
 function getItemizedBillHtml(data: any[]): string {
   // Use first record for patient info
   const patient = data && data.length > 0 ? data[0] : {};
-  const chargesTotal = data ? data.reduce((sum, row) => sum + (parseFloat(row.amount) || 0), 0) : 0;
-  const roomCharge = parseFloat(patient.room_chg) || 0;
-  const adjustment_total = parseFloat(patient.adjustment_total) || 0;
+  // const chargesTotal = data ? data.reduce((sum, row) => sum + (parseFloat(row.amount) || 0), 0) : 0;
+  // const roomCharge = parseFloat(patient.room_chg) || 0;
+  // const adjustment_total = parseFloat(patient.adjustment_total) || 0;
   
   // Parse insurance fields
   const [primaryInsName = "", plan = "", primaryPolicyNo = ""] = (patient.primary_insurance_data || "").split(":");
@@ -30,14 +30,21 @@ function getItemizedBillHtml(data: any[]): string {
 // console.log('====================================');
 // console.log(adjustmentDetails);
 // console.log('====================================');
-  const totalAmount = chargesTotal + roomCharge ;
-//   const totalDue = patient?.balance_total || 0;
-  const totalDue = totalAmount + (adjustment_total);
+  const totalAmount = patient?.total_charge || 0;
+  const payment_total = patient?.payment_total || 0;
+  const amount_due = patient?.amount_due || 0;
 
 
   // Format amount with thousand separator
   const formatAmount = (num: number) =>
     num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // Format units to remove trailing zeros and unnecessary decimals
+  const formatUnits = (units: string | number) => {
+    if (!units) return "";
+    const num = parseFloat(units.toString());
+    return isNaN(num) ? "" : num % 1 === 0 ? num.toString() : num.toString();
+  };
 
   // Helper for date formatting: MM-DD-YYYY
   const formatDate = (dateStr?: string) => {
@@ -90,7 +97,7 @@ function getItemizedBillHtml(data: any[]): string {
           <td style="width: 13%; padding-bottom: 0;">${date}</td>
           <td style="width: 10%; padding-bottom: 0;">${row.price_code || ""}</td>
           <td style="width: 40%; padding-bottom: 0;">${row.Description || ""}</td>
-          <td style="width: 7%; padding-bottom: 0;">${row.units || ""}</td>
+          <td style="width: 7%; padding-bottom: 0;">${formatUnits(row.units)}</td>
           <td style="width: 10%; padding-bottom: 0; text-align: right;"></td>
           <td style="width: 10%; padding-bottom: 0; text-align: right;">${row.amount != null ? formatAmount(parseFloat(row.amount)) : ""}</td>
         </tr>
@@ -200,7 +207,7 @@ function getItemizedBillHtml(data: any[]): string {
                   }
                 </p>
             </td>
-            <td style="width: 20%; padding:0;  vertical-align: top;">
+            <td style="width: 20%; padding: 0;  vertical-align: top;">
                 <table>
                     <tr style="background-color: #B7B7B7; border-bottom: 1px solid black;">
                         <td>Primary Contact Number</td>
@@ -216,7 +223,7 @@ function getItemizedBillHtml(data: any[]): string {
                     </tr>
                 </table>
             </td>
-            <td style="width: 50%;  padding:0; border: 1px solid black; border-top: 0; vertical-align: top;">
+            <td style="width: 50%;  padding: 0; border: 1px solid black; border-top: 0; vertical-align: top;">
                 <table>
                     <tr style="background-color: #B7B7B7;">
                         <td style="padding: 10px; border: 1px solid black; border-top: 0; border-left: 0; font-weight: bold;">Visit number</td>
@@ -313,9 +320,15 @@ function getItemizedBillHtml(data: any[]): string {
 
 
         <tr style="font-family: Courier New; font-size: 16px;">
-            <td colspan="4" style="text-align: center;">Amount Due:</td>
-            <td colspan="2" style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(parseFloat(totalDue))}</td>
+            <td colspan="4">Total Payment:</td>
+            <td colspan="2" style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(parseFloat(payment_total))}</td>
         </tr>
+
+          <tr style="font-family: Courier New; font-size: 16px;">
+            <td colspan="4">Balance:</td>
+            <td colspan="2" style="border: 1px solid black; border-left: 0px; border-right: 0px; text-align: right;">${formatAmount(parseFloat(amount_due))}</td>
+        </tr>
+
     </table>
 </body>
 </html>
