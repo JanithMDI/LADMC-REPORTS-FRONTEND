@@ -7,6 +7,7 @@ interface DomainConfig {
   title: string;
   reportLogo:string;
   address: string;
+  env?: boolean;
 }
 
 export const getDomainConfig = (): DomainConfig => {
@@ -21,7 +22,8 @@ export const getDomainConfig = (): DomainConfig => {
       reportLogo: 'https://ladowntownmc.com/wp-content/uploads/2019/06/copy-of-logo.png',
       address: `1711 West Temple Street <br>
                 Los Angeles CA 90026 5421 <br>
-                213-989-6100 <br>`
+                213-989-6100 <br>`,
+      env:true
     };
   }
   
@@ -33,6 +35,7 @@ export const getDomainConfig = (): DomainConfig => {
       address: `725 S  Orange Av <br>
                 West Covina  CA 91790<br>
                 626-338-8481 <br>`,
+      env:true
     };
   }
   
@@ -43,7 +46,8 @@ export const getDomainConfig = (): DomainConfig => {
       reportLogo: 'https://ladowntownmc.com/wp-content/uploads/2019/06/copy-of-logo.png',
       address: `1711 West Temple Street <br>
                 Los Angeles CA 90026 5421 <br>
-                213-989-6100 <br>`
+                213-989-6100 <br>`,
+      env:false
   };
 }
 

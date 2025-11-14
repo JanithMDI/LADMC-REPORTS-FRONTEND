@@ -49,21 +49,16 @@ function getItemizedBillHtml(data: any[]): string {
   // Helper for date formatting: MM-DD-YYYY
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return "";
-    const d = new Date(dateStr);
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const yyyy = d.getFullYear();
-    return `${mm}-${dd}-${yyyy}`;
+    const [year, month, day] = dateStr.split('T')[0].split('-');
+    return `${month}-${day}-${year}`;
   };
 
   // Helper for date formatting: MM-DD-YY
   const formatDateShort = (dateStr?: string) => {
     if (!dateStr) return "";
-    const d = new Date(dateStr);
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const yy = String(d.getFullYear()).slice(-2);
-    return `${mm}-${dd}-${yy}`;
+    const [year, month, day] = dateStr.split('T')[0].split('-');
+    const yy = year.slice(-2);
+    return `${month}-${day}-${yy}`;
   };
 
 

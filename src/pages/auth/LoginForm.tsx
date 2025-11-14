@@ -9,7 +9,8 @@ import { Label } from "../../components/ui/label"
 import { Alert, AlertDescription } from "../../components/ui/alert"
 import { Eye, EyeOff, AlertCircle } from "lucide-react"
 import { login } from "../../services/authService"
-import {  useNavigate } from "react-router-dom"
+import {  useNavigate,Link} from "react-router-dom"
+import { getDomainConfig } from '../../utils/domainConfig'
 
 export function LoginForm() {
   const [formData, setFormData] = useState({
@@ -20,6 +21,8 @@ export function LoginForm() {
   const [error, setError] = useState("")
   const navigate = useNavigate()
   const [loggingIn, setLoggingIn] = useState(false)
+  const config = getDomainConfig();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -112,7 +115,8 @@ export function LoginForm() {
             {loggingIn ? "Signing In..." : "Sign In"}
           </Button>
 
-          {/* <Link to={'/create-account'} className="block text-base text-foreground text-center opacity-80 hover:opacity-100 underline underline-offset-2">Create account</Link> */}
+          {config.env !== true && <Link to={'/create-account'} className="block text-base text-foreground text-center opacity-80 hover:opacity-100 underline underline-offset-2">Create account</Link> }
+       
         </form>
     </>
   )
