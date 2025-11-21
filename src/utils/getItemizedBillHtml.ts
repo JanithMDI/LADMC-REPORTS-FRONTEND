@@ -112,7 +112,7 @@ function getItemizedBillHtml(data: any[]): string {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LADMC Medical Invoice</title>
+    <title>${config.domain?.toUpperCase()} Medical Invoice</title>
     <style>
         table { width: 100%; border-collapse: collapse;}
         th, td {

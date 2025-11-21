@@ -8,6 +8,7 @@ interface DomainConfig {
   reportLogo:string;
   address: string;
   env?: boolean;
+  domain?: string;  
 }
 
 export const getDomainConfig = (): DomainConfig => {
@@ -23,7 +24,8 @@ export const getDomainConfig = (): DomainConfig => {
       address: `1711 West Temple Street <br>
                 Los Angeles CA 90026 5421 <br>
                 213-989-6100 <br>`,
-      env:true
+      env:true,
+      domain:'ladmc'
     };
   }
   
@@ -35,9 +37,11 @@ export const getDomainConfig = (): DomainConfig => {
       address: `725 S  Orange Av <br>
                 West Covina  CA 91790<br>
                 626-338-8481 <br>`,
-      env:true
+      env:true,
+      domain:'wcmc'
     };
   }
+  
   
   // Default configuration
   return {
@@ -47,7 +51,8 @@ export const getDomainConfig = (): DomainConfig => {
       address: `1711 West Temple Street <br>
                 Los Angeles CA 90026 5421 <br>
                 213-989-6100 <br>`,
-      env:false
+      env:false,
+      domain:'ladmc'
   };
 }
 

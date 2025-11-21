@@ -8,6 +8,16 @@
   <link rel="apple-touch-icon" href="https://ladowntownmc.com/wp-content/uploads/2019/06/icons8-stethoscope-16.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reporting</title>
+  <script>
+    const host = window.location.hostname.toLowerCase();
+    if (host.includes('wcmc')) {
+      document.title = 'WCMC Reporting';
+    } else if (host.includes('ladmc')) {
+      document.title = 'LADMC Reporting';
+    } else {
+      document.title = 'Test Reporting';
+    }
+  </script>
 </head>
 
 <body>

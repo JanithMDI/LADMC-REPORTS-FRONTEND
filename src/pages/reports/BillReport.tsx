@@ -4,14 +4,17 @@ import { exportReportPDF } from "../../services/reportService"
 import { Label } from "../../components/ui/label"
 import Loader from "../../components/ui/Loader"
 import getItemizedBillHtml from "../../utils/getItemizedBillHtml"
+import { getDomainConfig } from '../../utils/domainConfig'
 
 export default function BillReport() {
+
   const [downloading, setDownloading] = useState(false)
   const [dots, setDots] = useState(1)
   const [reference, setReference] = useState("")
   const [error, setError] = useState("")
   const [records, setRecords] = useState<any[]>([])
   const [previewHtml, setPreviewHtml] = useState<string | null>(null)
+  const config = getDomainConfig();
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined
@@ -63,7 +66,7 @@ export default function BillReport() {
       minute: "2-digit",
       hour12: false,
     });
-    const reportName = "LADMC Medical Invoicess";
+    const reportName = `${config.domain?.toUpperCase()} Medical Invoices`;
     const portraitCss = `
       <style>
         @media print {
