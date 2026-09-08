@@ -180,6 +180,14 @@ function getItemizedBillHtml(data: any[]): string {
                         <td>${formatDate(patient.birth_date)}</td>
                         <td>${patient.phy_name || ""}</td>
                     </tr>
+                     <tr style="background-color: #B7B7B7;">
+                        <td style="padding: 10px; border: 1px solid black; border-left: 0; font-weight: bold;">Room</td>
+                        <td colspan="2" style="padding: 10px; border: 1px solid black; font-weight: bold;">Bed</td>
+                    </tr>
+                    <tr>
+                        <td>${patient.room || ""}</td>
+                        <td>${patient.bed || ""}</td>
+                    </tr>
                 </table>
             </td>
         </tr>
