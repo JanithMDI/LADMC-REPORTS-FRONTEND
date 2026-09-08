@@ -12,14 +12,21 @@ function getItemizedBillHtml(data: any[]): string {
     num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   // Helper for date formatting: MM-DD-YYYY
-  const formatDate = (dateStr?: string) => {
+//   const formatDate = (dateStr?: string) => {
+//     if (!dateStr) return "";
+//     const d = new Date(dateStr);
+//     const mm = String(d.getMonth() + 1).padStart(2, "0");
+//     const dd = String(d.getDate()).padStart(2, "0");
+//     const yyyy = d.getFullYear();
+//     return `${mm}-${dd}-${yyyy}`;
+//   };
+
+    const formatDate = (dateStr?: string) => {
     if (!dateStr) return "";
-    const d = new Date(dateStr);
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const yyyy = d.getFullYear();
-    return `${mm}-${dd}-${yyyy}`;
-  };
+    const [year, month, day] = dateStr.split("T")[0].split("-");
+    if (!year || !month || !day) return "";
+    return `${month}-${day}-${year}`;
+    };
 
   // Group by Department
   const grouped: Record<string, any[]> = {};
